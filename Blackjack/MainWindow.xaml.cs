@@ -328,17 +328,22 @@ namespace Blackjack
             }
 
             //Count Total Value
-            int totalCPU = 0;
-            foreach (int value in CpuHandValue)
+            Count_CpuValue(sender, e);
+
+            //Turn Val[11] into [1] if we exceed 21
+            if (CpuValue > 21)
             {
-                CalculateValueCpuLogs.AppendLine($"Found a value in CpuHandValue! Adding [{value}] to Total[{totalCPU}]");
-                totalCPU += value;
+                if (CpuHandValue.Contains(11))
+                {
+                    CpuHandValue.Remove(11);
+                    CpuHandValue.Add(1);
+                }
             }
 
             //Display Total Value
-            CalculateValueCpuLogs.AppendLine($"Now Displaying Total[{totalCPU}]");
-            LblCpuScore.Text = totalCPU.ToString();
-            //TxtLogs.Text = CalculateValueCpuLogs.ToString();
+            CalculateValueCpuLogs.AppendLine($"Now Displaying Total[{CpuValue}]");
+            LblCpuScore.Text = CpuValue.ToString();
+            //TxtLogs.Text = CalculateValueCpuLogs.ToString(); 
         }
 
         private void Count_CpuValue(object sender, RoutedEventArgs e)
