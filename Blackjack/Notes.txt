@@ -1,1 +1,6 @@
 ﻿We are on the NewDesign Branch.
+
+Listbox needs to be replaced by a panel where we can add the images of cards.
+ - A new list needs to be created to keep track of the cards of each player.
+
+ 

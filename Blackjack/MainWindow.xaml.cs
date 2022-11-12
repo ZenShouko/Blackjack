@@ -4,7 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Blackjack
 {
@@ -24,6 +26,8 @@ namespace Blackjack
         //Lijsten
         List<string> Deck = new List<string>(); //ALL 52 CARDS IN THE GAME
         List<string> CardsInGame = new List<string>(); //ALL CARDS IN USE (player and cpu combined)
+        List<string> PlayerDeck = new List<string>(); //All CARDS PLAYER
+        List<string> CpuDeck = new List<string>(); //ALL CARDS CPU
         List<int> PlayerHandValue = new List<int>(); //ALL CARD VALUES FROM PLAYER
         List<int> CpuHandValue = new List<int>(); //ALL CARD VALUES FROM CPU
         //Andere Variabelen
@@ -86,61 +90,13 @@ namespace Blackjack
             Deck.Add("Diamonds-King");
             Deck.Add("Hearts-King");
             Deck.Add("Spades-King"); //51
+
+            AddRandom_CardsCONCEPT(sender, e);
         }
 
-        private void BtnDeel_Click(object sender, RoutedEventArgs e)
+        private void AddRandom_CardsCONCEPT(object sender, RoutedEventArgs e)
         {
-            //Enablind Buttons
-            BtnHit.IsEnabled = true;
-            BtnStand.IsEnabled = true;
-            BtnDeel.IsEnabled = false;
-            //Maak lijst leeg
-            CardsInGame.Clear();
-            PlayerDeck.Items.Clear();
-            CpuDeck.Items.Clear();
-            PlayerHandValue.Clear();
-            CpuHandValue.Clear();
-            CpuTurnLogs.Clear();
-            AutoStand = false;
-            Soft17Clear = false;
-            LblResults.Visibility = Visibility.Hidden;
-
-            //Verdeel 2 kaarten
-            for (int i = 0; i < 2; i++)
-            {
-                Give_Player_Card(sender, e);
-            }
-
-            ///[ADDING SPECIFIC CARDS]
-            //PlayerDeck.Items.Add(Deck.ElementAt(49));
-            //CalculateValueCONCEPT(sender, e);
-            //PlayerDeck.Items.Add(Deck.ElementAt(50));
-            //CalculateValueCONCEPT(sender, e);
-
-            //Voor CPU
-            GiveCpu_Card(sender, e);
-            if (!AutoStand) //Add secret card only when player does not have a blackjack
-            {
-                CpuDeck.Items.Add("Secret");
-                LblCpuScore.Text += "+";
-            }
-        }
-
-        private void BtnStand_Click(object sender, RoutedEventArgs e)
-        {
-            //Enabling da buttons
-            BtnHit.IsEnabled = false;
-            BtnStand.IsEnabled = false;
-            BtnDeel.IsEnabled = true;
-
-            //Remove Secret Card
-            CpuDeck.Items.Remove("Secret");
-            //Start CPU's turn
-            Cpu_Hit(sender, e);
-        }
-
-        private void Give_Player_Card(object sender, RoutedEventArgs e)
-        {
+            //Pull a card
             Random random = new Random();
             int index = random.Next(0, 52);
 
@@ -149,374 +105,463 @@ namespace Blackjack
                 index = random.Next(0, 52);
             }
 
+            //Add card to list
             CardsInGame.Add(Deck.ElementAt(index));
-            PlayerDeck.Items.Add(Deck.ElementAt(index));
+            PlayerDeck.Add(Deck.ElementAt(index));
 
-            CalculateValuePlayer(sender, e);
+            //Show card
+            Refresh_CardsInGameCONCEPT(sender, e);
         }
 
-        private void GiveCpu_Card(object sender, RoutedEventArgs e)
+        private void Refresh_CardsInGameCONCEPT(object sender, RoutedEventArgs e)
         {
-            Random random = new Random();
-            int index = random.Next(0, 52);
-
-            while (CardsInGame.Contains(Deck.ElementAt(index)))
+            //How many cards does the player have?
+            int TotalCards = 0;
+            foreach(var item in PlayerDeck)
             {
-                index = random.Next(0, 52);
+                TotalCards++;
             }
 
-            CardsInGame.Add(Deck.ElementAt(index));
-            CpuDeck.Items.Add(Deck.ElementAt(index));
-
-            CalculateValueCpu(sender, e);
-        }
-
-        void CalculateValuePlayer(object sender, RoutedEventArgs e)
-        {
-            //Vars
-            int Total = 0;
-            StringBuilder LOG = new StringBuilder(); //Logs om ace te volgen
-            /*------------------------------------------------------------------*/
-            LOG.AppendLine("Activated CalculateValueCONCEPT() >>>");
-
-            //On what Index is the last card?
-            int LastIndex = PlayerDeck.Items.Count - 1;
-            LOG.AppendLine($"Set Last Index Number to {LastIndex}.");
-            //Put the value into a string
-            string card = PlayerDeck.Items[LastIndex].ToString();
-            LOG.AppendLine($"Set last card to {card}.");
-
-            if (card.Contains("Ace"))
+            //Add the cards to the hand (Display)
+            string path = "";
+            for (int i = 0; i < TotalCards; i++)
             {
-                PlayerHandValue.Add(11);
-            }
-            else if (card.Contains("Two"))
-            {
-                PlayerHandValue.Add(2);
-            }
-            else if (card.Contains("Three"))
-            {
-                PlayerHandValue.Add(3);
-            }
-            else if (card.Contains("Four"))
-            {
-                PlayerHandValue.Add(4);
-            }
-            else if (card.Contains("Five"))
-            {
-                PlayerHandValue.Add(5);
-            }
-            else if (card.Contains("Six"))
-            {
-                PlayerHandValue.Add(6);
-            }
-            else if (card.Contains("Seven"))
-            {
-                PlayerHandValue.Add(7);
-            }
-            else if (card.Contains("Eight"))
-            {
-                PlayerHandValue.Add(8);
-            }
-            else if (card.Contains("Nine"))
-            {
-                PlayerHandValue.Add(9);
-            }
-            else if (card.Contains("Ten") || card.Contains("Jack") || card.Contains("Queen") || card.Contains("King"))
-            {
-                PlayerHandValue.Add(10);
-            }
-
-            //Reset Total value and count 
-            Total = 0;
-            foreach (var value in PlayerHandValue)
-            {
-                Total += value;
-            }
-
-            //Correct Aces if we exceed 21
-            if (Total > 21)
-            {
-                LOG.AppendLine("Total Exceeds 21 after adding the values.");
-                if (PlayerHandValue.Contains(11)) //can we switch 11 with 1?
-                {
-                    LOG.AppendLine("Replaced [11] with [1].");
-                    PlayerHandValue.Remove(11);
-                    PlayerHandValue.Add(1);
-                }
-                else //Auto Stand if there is no 11 to replace
-                {
-                    LOG.AppendLine("No [11] value found to replace. Activating AutoStand.");
-                    AutoStand = true;
-                    BtnStand_Click(sender, e);
-                }
-            }
-
-            //Reset Total value and count again
-            Total = 0;
-            foreach (var value in PlayerHandValue)
-            {
-                Total += value;
-            }
-
-            //Did we get a 21?
-            if (Total == 21)
-            {
-                LOG.AppendLine("We have 21! Activating AutoStand:)");
-                AutoStand = true;
-                BtnStand_Click(sender, e);
-            }
-
-            //Reset Total value and count again
-            Total = 0;
-            foreach (var value in PlayerHandValue)
-            {
-                Total += value;
-            }
-
-            //Display
-            LblSpelerScore.Text = Total.ToString();
-        }
-
-        private void CalculateValueCpu(object sender, RoutedEventArgs e)
-        {
-            CalculateValueCpuLogs.AppendLine("CalculateValueCpu() got activated >>");
-            //On what Index is the last card?
-            int LastIndex = CpuDeck.Items.Count - 1;
-            //Put the value into a string
-            string card = CpuDeck.Items[LastIndex].ToString();
-
-            if (card.Contains("Ace"))
-            {
-                CpuHandValue.Add(11);
-            }
-            else if (card.Contains("Two"))
-            {
-                CpuHandValue.Add(2);
-            }
-            else if (card.Contains("Three"))
-            {
-                CpuHandValue.Add(3);
-            }
-            else if (card.Contains("Four"))
-            {
-                CpuHandValue.Add(4);
-            }
-            else if (card.Contains("Five"))
-            {
-                CpuHandValue.Add(5);
-            }
-            else if (card.Contains("Six"))
-            {
-                CpuHandValue.Add(6);
-            }
-            else if (card.Contains("Seven"))
-            {
-                CpuHandValue.Add(7);
-            }
-            else if (card.Contains("Eight"))
-            {
-                CpuHandValue.Add(8);
-            }
-            else if (card.Contains("Nine"))
-            {
-                CpuHandValue.Add(9);
-            }
-            else if (card.Contains("Ten") || card.Contains("Jack") || card.Contains("Queen") || card.Contains("King"))
-            {
-                CpuHandValue.Add(10);
-            }
-
-            //Count Total Value
-            Count_CpuValue(sender, e);
-
-            //Turn Val[11] into [1] if we exceed 21
-            if (CpuValue > 21)
-            {
-                if (CpuHandValue.Contains(11))
-                {
-                    CpuHandValue.Remove(11);
-                    CpuHandValue.Add(1);
-                }
-            }
-
-            //Display Total Value
-            CalculateValueCpuLogs.AppendLine($"Now Displaying Total[{CpuValue}]");
-            LblCpuScore.Text = CpuValue.ToString();
-            //TxtLogs.Text = CalculateValueCpuLogs.ToString(); 
-        }
-
-        private void Count_CpuValue(object sender, RoutedEventArgs e)
-        {
-            CpuValue = 0;
-
-            foreach (int value in CpuHandValue)
-            {
-                CpuValue += value;
-            }
-        }
-        private void Cpu_Hit(object sender, RoutedEventArgs e)
-        {
-            CpuTurnLogs.AppendLine("Cpu_Hit() got activated >>");
-            //Give CPU It's second card
-            if (CpuDeck.Items.Count == 1)
-            {
-                CpuTurnLogs.AppendLine("Giving CPU a second card.");
-                GiveCpu_Card(sender, e);
-            }
-
-            //Count Total Value CPU
-            Count_CpuValue(sender, e);
-
-            //Count total value PLAYER
-            int totalPlayer = 0;
-            foreach (int value in PlayerHandValue)
-            {
-                totalPlayer += value;
-            }
-            CpuTurnLogs.AppendLine($"Counted totalvalues. CPU [{CpuValue}] Player [{totalPlayer}].");
-
-            //Does CPU have a blackjack?
-            if (CpuValue == 21)
-            {
-                if (totalPlayer != 21)
-                {
-                    CpuTurnLogs.AppendLine($"Cpu got a blackjack");
-                    Match_Results("Cpu");
-                }
-                else
-                {
-                    CpuTurnLogs.AppendLine($"Bot player and cpu got 21.");
-                    Match_Results("Draw");
-                }
-
-                TxtLogs.Text = CpuTurnLogs.ToString();
-                LblCpuScore.Text = CpuValue.ToString();
-                return;
-            }
-
-            //Keep pulling cards until we reach 17+
-            CpuTurnLogs.AppendLine($"Not won yet, pulling cards ... Cpu:[{CpuValue}]");
-
-            while (CpuValue < 17)
-            {
-                //Calculate CpuHandValue
-                Count_CpuValue(sender, e);
-
-                CpuTurnLogs.AppendLine($"- Pulled a card.");
-                GiveCpu_Card(sender, e);
-                Count_CpuValue(sender, e);
-                CpuTurnLogs.Append($" CPU value=[{CpuValue}]");
-            }
-
-
-            //Do we have a soft 17?
-            CpuTurnLogs.AppendLine($"Checking for soft 17 ...");
-            if (!Soft17Clear) //only clear if we haven't already
-            {
-                CpuTurnLogs.AppendLine($"We haven't removed an ace yet.");
-                CheckSoft17(sender, e);
-            }
-            else
-            {
-                CpuTurnLogs.AppendLine($"Soft Ace already cleared.");
-            }
-
-            //Recount Value
-            Count_CpuValue(sender, e);
-            //Keep pulling cards until we reach 17+
-            CpuTurnLogs.AppendLine($"Prompt to pull cards untill we reach 17+");
-            while (CpuValue < 17)
-            {
-                Count_CpuValue(sender, e);
-
-                CpuTurnLogs.AppendLine($"- Pulled a card.");
-                GiveCpu_Card(sender, e);
-                Count_CpuValue(sender, e);
-                CpuTurnLogs.Append($" CPU value=[{CpuValue}]");
-            }
-
-            //Recount Cpu Value
-            Count_CpuValue(sender, e);
-
-            //Who won the game now?
-            if(CpuValue > 21 && totalPlayer > 21)
-            {
-                CpuTurnLogs.AppendLine($"Both scored higher than 21.");
-                Match_Results("Draw");
-            }
-            else if (CpuValue == totalPlayer)
-            {
-                CpuTurnLogs.AppendLine($"Cpu and Player got same amount.");
-                Match_Results("Draw");
-            }
-            else if (CpuValue > 21)
-            {
-                CpuTurnLogs.AppendLine($"Cpu pulled higher than 21");
-                Match_Results("Player");
-            }
-            else if (CpuValue > totalPlayer)
-            {
-                CpuTurnLogs.AppendLine($"Cpu scored higher than player. CPU[{CpuValue}] > Player[{totalPlayer}]");
-                Match_Results("Cpu");
-            }
-            else if(totalPlayer > 21)
-            {
-                CpuTurnLogs.AppendLine($"Player scored above 21. Cpu below.");
-                Match_Results("Cpu");
-            }
-            else
-            {
-                CpuTurnLogs.AppendLine($"Player won (No arguments given).");
-                Match_Results("Player");
-            }
-
-            //Recount cpuvalue
-            Count_CpuValue(sender, e);
-            //Display
-            CpuTurnLogs.AppendLine($"Displaying Value [{CpuValue}]");
-            TxtLogs.Text = CpuTurnLogs.ToString();
-            LblCpuScore.Text = CpuValue.ToString();
-        }
-
-        private void CheckSoft17(object sender, RoutedEventArgs e)
-        {
-            CpuTurnLogs.AppendLine($"Checking for an ACE.");
-            //Is there an ace?
-            if (CpuHandValue.Contains(11))
-            {
-                CpuTurnLogs.AppendLine($"Ace found. Replacing [11] with [1].");
-                CpuHandValue.Remove(11);
-                CpuHandValue.Add(1);
-                Soft17Clear = true;
-            }
-            else
-            {
-                CpuTurnLogs.AppendLine($"Ace not found ...");
+                Image Card = new Image();
+                Card.Height = 115;
+                Card.Width = 115;
+                Card.Source = new BitmapImage(new Uri("Diamonds-Ace.png"));
             }
         }
 
-        private void Match_Results(String Result)
-        {
-            //Maak result label visible
-            LblResults.Visibility = Visibility.Visible;
+        //private void BtnDeel_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //Enablind Buttons
+        //    BtnHit.IsEnabled = true;
+        //    BtnStand.IsEnabled = true;
+        //    BtnDeel.IsEnabled = false;
+        //    //Maak lijst leeg
+        //    CardsInGame.Clear();
+        //    PlayerDeck.Items.Clear();
+        //    CpuDeck.Items.Clear();
+        //    PlayerHandValue.Clear();
+        //    CpuHandValue.Clear();
+        //    CpuTurnLogs.Clear();
+        //    AutoStand = false;
+        //    Soft17Clear = false;
+        //    LblResults.Visibility = Visibility.Hidden;
 
-            //Tell player wether they won or lost
-            if (Result == "Player")
-            {
-                LblResults.Content = "Win";
-                LblResults.Foreground = Brushes.Green;
-            }
-            else if (Result == "Cpu")
-            {
-                LblResults.Content = "Lose";
-                LblResults.Foreground = Brushes.Red;
-            }
-            else
-            {
-                LblResults.Content = "Draw";
-                LblResults.Foreground = Brushes.DarkOrange;
-            }
-        }
+        //    //Verdeel 2 kaarten
+        //    for (int i = 0; i < 2; i++)
+        //    {
+        //        Give_Player_Card(sender, e);
+        //    }
+
+        //    ///[ADDING SPECIFIC CARDS]
+        //    //PlayerDeck.Items.Add(Deck.ElementAt(49));
+        //    //CalculateValueCONCEPT(sender, e);
+        //    //PlayerDeck.Items.Add(Deck.ElementAt(50));
+        //    //CalculateValueCONCEPT(sender, e);
+
+        //    //Voor CPU
+        //    GiveCpu_Card(sender, e);
+        //    if (!AutoStand) //Add secret card only when player does not have a blackjack
+        //    {
+        //        CpuDeck.Items.Add("Secret");
+        //        LblCpuScore.Text += "+";
+        //    }
+        //}
+
+        //private void BtnStand_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //Enabling da buttons
+        //    BtnHit.IsEnabled = false;
+        //    BtnStand.IsEnabled = false;
+        //    BtnDeel.IsEnabled = true;
+
+        //    //Remove Secret Card
+        //    CpuDeck.Items.Remove("Secret");
+        //    //Start CPU's turn
+        //    Cpu_Hit(sender, e);
+        //}
+
+        //private void Give_Player_Card(object sender, RoutedEventArgs e)
+        //{
+        //    Random random = new Random();
+        //    int index = random.Next(0, 52);
+
+        //    while (CardsInGame.Contains(Deck.ElementAt(index)))
+        //    {
+        //        index = random.Next(0, 52);
+        //    }
+
+        //    CardsInGame.Add(Deck.ElementAt(index));
+        //    PlayerDeck.Items.Add(Deck.ElementAt(index));
+
+        //    CalculateValuePlayer(sender, e);
+        //}
+
+        //private void GiveCpu_Card(object sender, RoutedEventArgs e)
+        //{
+        //    Random random = new Random();
+        //    int index = random.Next(0, 52);
+
+        //    while (CardsInGame.Contains(Deck.ElementAt(index)))
+        //    {
+        //        index = random.Next(0, 52);
+        //    }
+
+        //    CardsInGame.Add(Deck.ElementAt(index));
+        //    CpuDeck.Items.Add(Deck.ElementAt(index));
+
+        //    CalculateValueCpu(sender, e);
+        //}
+
+        //void CalculateValuePlayer(object sender, RoutedEventArgs e)
+        //{
+        //    //Vars
+        //    int Total = 0;
+        //    StringBuilder LOG = new StringBuilder(); //Logs om ace te volgen
+        //    /*------------------------------------------------------------------*/
+        //    LOG.AppendLine("Activated CalculateValueCONCEPT() >>>");
+
+        //    //On what Index is the last card?
+        //    int LastIndex = PlayerDeck.Items.Count - 1;
+        //    LOG.AppendLine($"Set Last Index Number to {LastIndex}.");
+        //    //Put the value into a string
+        //    string card = PlayerDeck.Items[LastIndex].ToString();
+        //    LOG.AppendLine($"Set last card to {card}.");
+
+        //    if (card.Contains("Ace"))
+        //    {
+        //        PlayerHandValue.Add(11);
+        //    }
+        //    else if (card.Contains("Two"))
+        //    {
+        //        PlayerHandValue.Add(2);
+        //    }
+        //    else if (card.Contains("Three"))
+        //    {
+        //        PlayerHandValue.Add(3);
+        //    }
+        //    else if (card.Contains("Four"))
+        //    {
+        //        PlayerHandValue.Add(4);
+        //    }
+        //    else if (card.Contains("Five"))
+        //    {
+        //        PlayerHandValue.Add(5);
+        //    }
+        //    else if (card.Contains("Six"))
+        //    {
+        //        PlayerHandValue.Add(6);
+        //    }
+        //    else if (card.Contains("Seven"))
+        //    {
+        //        PlayerHandValue.Add(7);
+        //    }
+        //    else if (card.Contains("Eight"))
+        //    {
+        //        PlayerHandValue.Add(8);
+        //    }
+        //    else if (card.Contains("Nine"))
+        //    {
+        //        PlayerHandValue.Add(9);
+        //    }
+        //    else if (card.Contains("Ten") || card.Contains("Jack") || card.Contains("Queen") || card.Contains("King"))
+        //    {
+        //        PlayerHandValue.Add(10);
+        //    }
+
+        //    //Reset Total value and count 
+        //    Total = 0;
+        //    foreach (var value in PlayerHandValue)
+        //    {
+        //        Total += value;
+        //    }
+
+        //    //Correct Aces if we exceed 21
+        //    if (Total > 21)
+        //    {
+        //        LOG.AppendLine("Total Exceeds 21 after adding the values.");
+        //        if (PlayerHandValue.Contains(11)) //can we switch 11 with 1?
+        //        {
+        //            LOG.AppendLine("Replaced [11] with [1].");
+        //            PlayerHandValue.Remove(11);
+        //            PlayerHandValue.Add(1);
+        //        }
+        //        else //Auto Stand if there is no 11 to replace
+        //        {
+        //            LOG.AppendLine("No [11] value found to replace. Activating AutoStand.");
+        //            AutoStand = true;
+        //            BtnStand_Click(sender, e);
+        //        }
+        //    }
+
+        //    //Reset Total value and count again
+        //    Total = 0;
+        //    foreach (var value in PlayerHandValue)
+        //    {
+        //        Total += value;
+        //    }
+
+        //    //Did we get a 21?
+        //    if (Total == 21)
+        //    {
+        //        LOG.AppendLine("We have 21! Activating AutoStand:)");
+        //        AutoStand = true;
+        //        BtnStand_Click(sender, e);
+        //    }
+
+        //    //Reset Total value and count again
+        //    Total = 0;
+        //    foreach (var value in PlayerHandValue)
+        //    {
+        //        Total += value;
+        //    }
+
+        //    //Display
+        //    LblSpelerScore.Text = Total.ToString();
+        //}
+
+        //private void CalculateValueCpu(object sender, RoutedEventArgs e)
+        //{
+        //    CalculateValueCpuLogs.AppendLine("CalculateValueCpu() got activated >>");
+        //    //On what Index is the last card?
+        //    int LastIndex = CpuDeck.Items.Count - 1;
+        //    //Put the value into a string
+        //    string card = CpuDeck.Items[LastIndex].ToString();
+
+        //    if (card.Contains("Ace"))
+        //    {
+        //        CpuHandValue.Add(11);
+        //    }
+        //    else if (card.Contains("Two"))
+        //    {
+        //        CpuHandValue.Add(2);
+        //    }
+        //    else if (card.Contains("Three"))
+        //    {
+        //        CpuHandValue.Add(3);
+        //    }
+        //    else if (card.Contains("Four"))
+        //    {
+        //        CpuHandValue.Add(4);
+        //    }
+        //    else if (card.Contains("Five"))
+        //    {
+        //        CpuHandValue.Add(5);
+        //    }
+        //    else if (card.Contains("Six"))
+        //    {
+        //        CpuHandValue.Add(6);
+        //    }
+        //    else if (card.Contains("Seven"))
+        //    {
+        //        CpuHandValue.Add(7);
+        //    }
+        //    else if (card.Contains("Eight"))
+        //    {
+        //        CpuHandValue.Add(8);
+        //    }
+        //    else if (card.Contains("Nine"))
+        //    {
+        //        CpuHandValue.Add(9);
+        //    }
+        //    else if (card.Contains("Ten") || card.Contains("Jack") || card.Contains("Queen") || card.Contains("King"))
+        //    {
+        //        CpuHandValue.Add(10);
+        //    }
+
+        //    //Count Total Value
+        //    Count_CpuValue(sender, e);
+
+        //    //Turn Val[11] into [1] if we exceed 21
+        //    if (CpuValue > 21)
+        //    {
+        //        if (CpuHandValue.Contains(11))
+        //        {
+        //            CpuHandValue.Remove(11);
+        //            CpuHandValue.Add(1);
+        //        }
+        //    }
+
+        //    //Display Total Value
+        //    CalculateValueCpuLogs.AppendLine($"Now Displaying Total[{CpuValue}]");
+        //    LblCpuScore.Text = CpuValue.ToString();
+        //    //TxtLogs.Text = CalculateValueCpuLogs.ToString(); 
+        //}
+
+        //private void Count_CpuValue(object sender, RoutedEventArgs e)
+        //{
+        //    CpuValue = 0;
+
+        //    foreach (int value in CpuHandValue)
+        //    {
+        //        CpuValue += value;
+        //    }
+        //}
+        //private void Cpu_Hit(object sender, RoutedEventArgs e)
+        //{
+        //    CpuTurnLogs.AppendLine("Cpu_Hit() got activated >>");
+        //    //Give CPU It's second card
+        //    if (CpuDeck.Items.Count == 1)
+        //    {
+        //        CpuTurnLogs.AppendLine("Giving CPU a second card.");
+        //        GiveCpu_Card(sender, e);
+        //    }
+
+        //    //Count Total Value CPU
+        //    Count_CpuValue(sender, e);
+
+        //    //Count total value PLAYER
+        //    int totalPlayer = 0;
+        //    foreach (int value in PlayerHandValue)
+        //    {
+        //        totalPlayer += value;
+        //    }
+        //    CpuTurnLogs.AppendLine($"Counted totalvalues. CPU [{CpuValue}] Player [{totalPlayer}].");
+
+        //    //Does CPU have a blackjack?
+        //    if (CpuValue == 21)
+        //    {
+        //        if (totalPlayer != 21)
+        //        {
+        //            CpuTurnLogs.AppendLine($"Cpu got a blackjack");
+        //            Match_Results("Cpu");
+        //        }
+        //        else
+        //        {
+        //            CpuTurnLogs.AppendLine($"Bot player and cpu got 21.");
+        //            Match_Results("Draw");
+        //        }
+
+        //        TxtLogs.Text = CpuTurnLogs.ToString();
+        //        LblCpuScore.Text = CpuValue.ToString();
+        //        return;
+        //    }
+
+        //    //Keep pulling cards until we reach 17+
+        //    CpuTurnLogs.AppendLine($"Not won yet, pulling cards ... Cpu:[{CpuValue}]");
+
+        //    while (CpuValue < 17)
+        //    {
+        //        //Calculate CpuHandValue
+        //        Count_CpuValue(sender, e);
+
+        //        CpuTurnLogs.AppendLine($"- Pulled a card.");
+        //        GiveCpu_Card(sender, e);
+        //        Count_CpuValue(sender, e);
+        //        CpuTurnLogs.Append($" CPU value=[{CpuValue}]");
+        //    }
+
+
+        //    //Do we have a soft 17?
+        //    CpuTurnLogs.AppendLine($"Checking for soft 17 ...");
+        //    if (!Soft17Clear) //only clear if we haven't already
+        //    {
+        //        CpuTurnLogs.AppendLine($"We haven't removed an ace yet.");
+        //        CheckSoft17(sender, e);
+        //    }
+        //    else
+        //    {
+        //        CpuTurnLogs.AppendLine($"Soft Ace already cleared.");
+        //    }
+
+        //    //Recount Value
+        //    Count_CpuValue(sender, e);
+        //    //Keep pulling cards until we reach 17+
+        //    CpuTurnLogs.AppendLine($"Prompt to pull cards untill we reach 17+");
+        //    while (CpuValue < 17)
+        //    {
+        //        Count_CpuValue(sender, e);
+
+        //        CpuTurnLogs.AppendLine($"- Pulled a card.");
+        //        GiveCpu_Card(sender, e);
+        //        Count_CpuValue(sender, e);
+        //        CpuTurnLogs.Append($" CPU value=[{CpuValue}]");
+        //    }
+
+        //    //Recount Cpu Value
+        //    Count_CpuValue(sender, e);
+
+        //    //Who won the game now?
+        //    if(CpuValue > 21 && totalPlayer > 21)
+        //    {
+        //        CpuTurnLogs.AppendLine($"Both scored higher than 21.");
+        //        Match_Results("Draw");
+        //    }
+        //    else if (CpuValue == totalPlayer)
+        //    {
+        //        CpuTurnLogs.AppendLine($"Cpu and Player got same amount.");
+        //        Match_Results("Draw");
+        //    }
+        //    else if (CpuValue > 21)
+        //    {
+        //        CpuTurnLogs.AppendLine($"Cpu pulled higher than 21");
+        //        Match_Results("Player");
+        //    }
+        //    else if (CpuValue > totalPlayer)
+        //    {
+        //        CpuTurnLogs.AppendLine($"Cpu scored higher than player. CPU[{CpuValue}] > Player[{totalPlayer}]");
+        //        Match_Results("Cpu");
+        //    }
+        //    else if(totalPlayer > 21)
+        //    {
+        //        CpuTurnLogs.AppendLine($"Player scored above 21. Cpu below.");
+        //        Match_Results("Cpu");
+        //    }
+        //    else
+        //    {
+        //        CpuTurnLogs.AppendLine($"Player won (No arguments given).");
+        //        Match_Results("Player");
+        //    }
+
+        //    //Recount cpuvalue
+        //    Count_CpuValue(sender, e);
+        //    //Display
+        //    CpuTurnLogs.AppendLine($"Displaying Value [{CpuValue}]");
+        //    TxtLogs.Text = CpuTurnLogs.ToString();
+        //    LblCpuScore.Text = CpuValue.ToString();
+        //}
+
+        //private void CheckSoft17(object sender, RoutedEventArgs e)
+        //{
+        //    CpuTurnLogs.AppendLine($"Checking for an ACE.");
+        //    //Is there an ace?
+        //    if (CpuHandValue.Contains(11))
+        //    {
+        //        CpuTurnLogs.AppendLine($"Ace found. Replacing [11] with [1].");
+        //        CpuHandValue.Remove(11);
+        //        CpuHandValue.Add(1);
+        //        Soft17Clear = true;
+        //    }
+        //    else
+        //    {
+        //        CpuTurnLogs.AppendLine($"Ace not found ...");
+        //    }
+        //}
+
+        //private void Match_Results(String Result)
+        //{
+        //    //Maak result label visible
+        //    LblResults.Visibility = Visibility.Visible;
+
+        //    //Tell player wether they won or lost
+        //    if (Result == "Player")
+        //    {
+        //        LblResults.Content = "Win";
+        //        LblResults.Foreground = Brushes.Green;
+        //    }
+        //    else if (Result == "Cpu")
+        //    {
+        //        LblResults.Content = "Lose";
+        //        LblResults.Foreground = Brushes.Red;
+        //    }
+        //    else
+        //    {
+        //        LblResults.Content = "Draw";
+        //        LblResults.Foreground = Brushes.DarkOrange;
+        //    }
+        //}
     }
 }
