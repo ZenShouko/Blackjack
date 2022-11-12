@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Blackjack"
         mc:Ignorable="d" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight"
         Title="BlackJack" Height="auto" Width="auto">
-    <Grid Height="600" Width="800" Loaded="CreerDeck">
+    <Grid Height="600" Width="850" Loaded="CreerDeck">
         <Grid.Background>
             <ImageBrush ImageSource="/PNG/Casino_Texture.jpg" Stretch="None" TileMode="Tile" Viewport="0, 0, 100, 100" ViewportUnits="Absolute"/>
         </Grid.Background>
@@ -45,24 +45,24 @@
         </Border>
         <Border Background="Black" Opacity="0.4" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="1" Margin="10" CornerRadius="100">
         </Border>
-            <TextBlock x:Name="TxtResults" Text="Make a play 😊" FontSize="36" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" 
+            <TextBlock x:Name="TxtResults" Text="Make a play 😊" FontSize="52" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" 
                    HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" Foreground="White"/>
 
         <!--Buttons-->
         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button Cursor="Hand" x:Name="BtnDeel" Content="Deel" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="150"
-                FontSize="24" Margin="15" />
+                FontSize="24" Margin="15" Click="BtnDeel_Click" Background="AliceBlue"/>
             <Button Cursor="Hand" x:Name="BtnHit" Content="Hit" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="150"
-                FontSize="24" Margin="15"  IsEnabled="False"/>
+                FontSize="24" Margin="15"  IsEnabled="False" Click="Give_Player_Card"/>
             <Button Cursor="Hand" x:Name="BtnStand" Content="Stand" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="150"
-                FontSize="24" Margin="15"  IsEnabled="False"/>
+                FontSize="24" Margin="15"  IsEnabled="False" Click="BtnStand_Click"/>
         </StackPanel>
         
         <!--Player Side-->
         <Border CornerRadius="3, 3, 12, 6" BorderBrush="White" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.4" Grid.Column="1" Grid.Row="4" Margin="0, 5"/>
         <StackPanel x:Name="SpnlPlayerDeck" Orientation="Horizontal" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Image Source="\Cards\Spades-Two.png" Width="105" Height="150" Margin="2, 0"/>
-            <Image Source="\Cards\Clubs-Ten.png" Width="105" Height="150" Margin="2, 0"/>
+            <!--<Image Source="\Cards\Spades-Two.png" Width="105" Height="150" Margin="2, 0"/>
+            <Image Source="\Cards\Clubs-Ten.png" Width="105" Height="150" Margin="2, 0"/>-->
         </StackPanel>
         <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115" Grid.Column="2" Grid.Row="4"/>
         <Label x:Name="LblPlayerScore" Content="21" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
