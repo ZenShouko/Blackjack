@@ -26,10 +26,7 @@
         
         <!--Cpu Side-->
         <Border CornerRadius="3, 3, 12, 6" BorderBrush="White" BorderThickness="2, 5, 2, 3" Background="Black" Opacity="0.4" Grid.Column="1" Margin="0, 5"/>
-        <StackPanel x:Name="SpnlCpuDeck" Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1" VerticalAlignment="Center">
-            <Image Source="\Cards\Card-Back.png" Width="105" Height="150" Margin="0"/>
-            <Image Source="\Cards\Hearts-Ace.png" Width="105" Height="150" Margin="0"/>
-        </StackPanel>
+        <StackPanel x:Name="SpnlCpuDeck" Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1" VerticalAlignment="Center"/>
         <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115"/>
         <Label x:Name="LblCpuScore" Content="x" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
                FontFamily="Arial" Foreground="MintCream"/>
@@ -53,17 +50,14 @@
             <Button Cursor="Hand" x:Name="BtnDeel" Content="Deel" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="150"
                 FontSize="24" Margin="15" Click="BtnDeel_Click" Background="AliceBlue"/>
             <Button Cursor="Hand" x:Name="BtnHit" Content="Hit" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="150"
-                FontSize="24" Margin="15"  IsEnabled="False" Click="Give_Player_Card"/>
+                FontSize="24" Margin="15"  IsEnabled="False" Click="BtnHit_Click"/>
             <Button Cursor="Hand" x:Name="BtnStand" Content="Stand" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="150"
                 FontSize="24" Margin="15"  IsEnabled="False" Click="BtnStand_Click"/>
         </StackPanel>
         
         <!--Player Side-->
         <Border CornerRadius="3, 3, 12, 6" BorderBrush="White" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.4" Grid.Column="1" Grid.Row="4" Margin="0, 5"/>
-        <StackPanel x:Name="SpnlPlayerDeck" Orientation="Horizontal" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <!--<Image Source="\Cards\Spades-Two.png" Width="105" Height="150" Margin="2, 0"/>
-            <Image Source="\Cards\Clubs-Ten.png" Width="105" Height="150" Margin="2, 0"/>-->
-        </StackPanel>
+        <StackPanel x:Name="SpnlPlayerDeck" Orientation="Horizontal" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115" Grid.Column="2" Grid.Row="4"/>
         <Label x:Name="LblPlayerScore" Content="x" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
                FontFamily="Arial" Foreground="MintCream"/>
@@ -71,45 +65,4 @@
         <TextBlock x:Name="TxtPlayerIcon" Text="🤔" Grid.Row="4" FontSize="82" VerticalAlignment="Center" HorizontalAlignment="Center" 
                    Foreground="Black" Opacity="0.9"/>
     </Grid>
-    
-    
-    <!--Previous Design-->
-    <!--<Grid Width="650" Height="400" Background="Beige" Loaded="CreerDeck" >-->
-        <!--Definitions-->
-        <!--<Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>-->
-        
-        <!--Speler kant-->
-        <!--<TextBlock Text="Speler 🙂" FontSize="26" FontWeight="Bold" VerticalAlignment="Top" Margin="10"/>
-        --><!--<ListBox x:Name="PlayerDeck" Grid.Row="1" Margin="5"/>--><!--
-        <TextBlock x:Name="LblSpelerScore" Text="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"/>
-        
-        --><!--Functionaliteit--><!--
-        <Label x:Name="LblResults" Content="Result" Grid.Column="1" FontSize="24" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
-        
-        <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
-            <Button Cursor="Hand" x:Name="BtnDeel" Content="Deel" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="150"
-                FontSize="24" Margin="15" Click="BtnDeel_Click"/>
-            <Button Cursor="Hand" x:Name="BtnHit" Content="Hit" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="150"
-                FontSize="24" Margin="15" Click="Give_Player_Card" IsEnabled="False"/>
-            <Button Cursor="Hand" x:Name="BtnStand" Content="Stand" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="150"
-                FontSize="24" Margin="15" Click="BtnStand_Click" IsEnabled="False"/>
-        </StackPanel>
-        
-        --><!--CPU kant--><!--
-        <TextBlock Text="CPU 🤖" FontSize="26" Grid.Column="2" FontWeight="Bold" VerticalAlignment="Top" Margin="10"/>
-        --><!--<ListBox x:Name="CpuDeck" Grid.Row="1" Grid.Column="2" Margin="5"/>--><!--
-        <TextBlock x:Name="LblCpuScore" Text="0" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"/>
-
-        --><!--LOGS--><!--
-        <TextBox x:Name="TxtLogs" Grid.Row="2" Grid.Column="1" VerticalScrollBarVisibility="Auto" FontFamily="Courier New" TextWrapping="Wrap" FontWeight="DemiBold"/>-->
-    <!--</Grid>-->
 </Window>
