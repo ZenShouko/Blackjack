@@ -4,11 +4,14 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace Blackjack
 {
@@ -22,7 +25,7 @@ namespace Blackjack
         {
             InitializeComponent();
         }
-        
+
         //Lijsten
         List<string> Deck = new List<string>(); //ALL 52 CARDS IN THE GAME
         List<string> CardsInGame = new List<string>(); //ALL CARDS IN USE (player and cpu combined)
@@ -202,6 +205,7 @@ namespace Blackjack
             //Start CPU's turn
             Cpu_Turn(sender, e);
         }
+
 
         private void AddCard(int index, bool Player)
         {
