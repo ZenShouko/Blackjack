@@ -20,11 +20,15 @@ namespace Blackjack
     /// </summary>
     public partial class MainWindow : Window
     {
+        DispatcherTimer Timer1 = new DispatcherTimer();
         //clubs (♣), diamonds (♦), hearts (♥) and spades (♠)
         public MainWindow()
         {
             InitializeComponent();
+            Timer1.Interval = TimeSpan.FromMilliseconds(1000);
+            Timer1.Tick += Timer1_Tick;
         }
+
 
         //Lijsten
         List<string> Deck = new List<string>(); //ALL 52 CARDS IN THE GAME
@@ -38,7 +42,15 @@ namespace Blackjack
         bool Soft17Clear = false;
         int PlayerValue;
         int CpuValue;
+        int TimeCount;
         string CardName;
+
+        private void Timer1_Tick(object sender, EventArgs e, bool Player)
+        {
+            //Deel kaarten
+            
+        }
+
         public Image Card(bool Player)
         {
             int LeftMargin = 0; //Used as the margin
