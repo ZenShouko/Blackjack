@@ -25,8 +25,8 @@
         </Grid.RowDefinitions>
         
         <!--Cpu Side-->
-        <Border CornerRadius="3, 3, 12, 6" BorderBrush="White" BorderThickness="2, 5, 2, 3" Background="Black" Opacity="0.4" Grid.Column="1" Margin="0, 5"/>
-        <StackPanel x:Name="SpnlCpuDeck" Orientation="Horizontal" HorizontalAlignment="Center" Grid.Column="1" VerticalAlignment="Center"/>
+        <Border CornerRadius="3, 3, 12, 6" BorderBrush="White" BorderThickness="2, 5, 2, 3" Background="Black" Opacity="0.4" Grid.Column="1" Margin="0, 5" Width="400"/>
+        <DockPanel x:Name="SpnlCpuDeck" HorizontalAlignment="Center" Grid.Column="1" VerticalAlignment="Center"/>
         <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115"/>
         <Label x:Name="LblCpuScore" Content="x" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
                FontFamily="Arial" Foreground="MintCream"/>
@@ -56,8 +56,8 @@
         </StackPanel>
         
         <!--Player Side-->
-        <Border CornerRadius="3, 3, 12, 6" BorderBrush="White" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.4" Grid.Column="1" Grid.Row="4" Margin="0, 5"/>
-        <StackPanel x:Name="SpnlPlayerDeck" Orientation="Horizontal" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Border CornerRadius="3, 3, 12, 6" BorderBrush="White" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.4" Grid.Column="1" Grid.Row="4" Margin="0, 5" Width="400"/>
+        <DockPanel x:Name="SpnlPlayerDeck" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115" Grid.Column="2" Grid.Row="4"/>
         <Label x:Name="LblPlayerScore" Content="x" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
                FontFamily="Arial" Foreground="MintCream"/>

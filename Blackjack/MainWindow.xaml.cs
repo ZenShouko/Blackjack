@@ -39,16 +39,43 @@ namespace Blackjack
         int PlayerValue;
         int CpuValue;
         string CardName;
-        public Image Card()
+        public Image Card(bool Player)
         {
+            int LeftMargin = 0; //Used as the margin
+            int Height = 150;
+            int Width = 105;
+
+            //Match margin so they stack on top of each other. [1st card margin 0, all others -85]
+            if (Player)
+            {
+                if (SpnlPlayerDeck.Children.Count != 0)
+                {
+                    LeftMargin = -85;
+                }
+            }
+            else
+            {
+                if (SpnlCpuDeck.Children.Count != 0)
+                {
+                    LeftMargin = -85;
+                }
+            }
+
+            //Make secret card bigger so it matches other card sizes
+            if (CardName == "Card-Back")
+            {
+                Height = 155;
+                Width = 110;
+            }
+            
             //Create Card
             Image Card = new Image
             {
-                Height = 150,
-                Width = 105,
+                Height = Height,
+                Width = Width,
                 Stretch = Stretch.UniformToFill,
                 Source = new BitmapImage(new Uri($"/Cards/{CardName}.png", UriKind.Relative)),
-                Margin = new Thickness(2, 0, 2, 0)
+                Margin = new Thickness(LeftMargin, 0, 0, 0)
             };
 
             return Card;
@@ -172,7 +199,7 @@ namespace Blackjack
             AddCard(PullCard(), false);
             //Secret Card
             CardName = "Card-Back";
-            SpnlCpuDeck.Children.Add(Card());
+            SpnlCpuDeck.Children.Add(Card(false));
 
             //Did we get a 21?
             if (PlayerValue == 21)
@@ -217,13 +244,13 @@ namespace Blackjack
             //Who pulled the card?
             if (Player)
             {
-                SpnlPlayerDeck.Children.Add(Card());
+                SpnlPlayerDeck.Children.Add(Card(Player));
                 PlayerDeck.Add(Deck.ElementAt(index));
                 PlayerHandValue.Add(CardValue());
             }
             else
             {
-                SpnlCpuDeck.Children.Add(Card());
+                SpnlCpuDeck.Children.Add(Card(Player));
                 CpuDeck.Add(Deck.ElementAt(index));
                 CpuHandValue.Add(CardValue());
             }
