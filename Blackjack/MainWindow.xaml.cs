@@ -26,6 +26,7 @@ namespace Blackjack
             InitializeComponent();
         }
 
+
         //Lijsten
         List<string> Deck = new List<string>(); //ALL 52 CARDS IN THE GAME
         List<string> CardsInGame = new List<string>(); //ALL CARDS IN USE (player and cpu combined)
@@ -39,16 +40,45 @@ namespace Blackjack
         int PlayerValue;
         int CpuValue;
         string CardName;
-        public Image Card()
+
+
+        public Image Card(bool Player)
         {
+            int LeftMargin = 0; //Used as the margin
+            int Height = 150;
+            int Width = 105;
+
+            //Match margin so they stack on top of each other. [1st card margin 0, all others -85]
+            if (Player)
+            {
+                if (SpnlPlayerDeck.Children.Count != 0)
+                {
+                    LeftMargin = -85;
+                }
+            }
+            else
+            {
+                if (SpnlCpuDeck.Children.Count != 0)
+                {
+                    LeftMargin = -85;
+                }
+            }
+
+            //Make secret card bigger so it matches other card sizes
+            if (CardName == "Card-Back")
+            {
+                Height = 155;
+                Width = 110;
+            }
+            
             //Create Card
             Image Card = new Image
             {
-                Height = 150,
-                Width = 105,
+                Height = Height,
+                Width = Width,
                 Stretch = Stretch.UniformToFill,
                 Source = new BitmapImage(new Uri($"/Cards/{CardName}.png", UriKind.Relative)),
-                Margin = new Thickness(2, 0, 2, 0)
+                Margin = new Thickness(LeftMargin, 0, 0, 0)
             };
 
             return Card;
@@ -126,11 +156,6 @@ namespace Blackjack
 
         private void Reset_Table()
         {
-            //Enablind Buttons
-            BtnHit.IsEnabled = true;
-            BtnStand.IsEnabled = true;
-            BtnDeel.IsEnabled = false;
-
             //Maak lijst leeg
             //Cards
             CardsInGame.Clear();
@@ -154,15 +179,56 @@ namespace Blackjack
             LblPlayerScore.FontWeight = FontWeights.Regular;
         }
 
-        private void BtnDeel_Click(object sender, RoutedEventArgs e)
+        private void Button_Enabling(bool Deel, bool Hit, bool Stand)
+        {
+            if (Deel)
+            {
+                BtnDeel.IsEnabled = true;
+            }
+            else
+            {
+                BtnDeel.IsEnabled = false;
+            }
+
+            if (Hit)
+            {
+                BtnHit.IsEnabled = true;
+            }
+            else
+            {
+                BtnHit.IsEnabled = false;
+            }
+
+            if (Stand)
+            {
+                BtnStand.IsEnabled = true;
+            }
+            else
+            {
+                BtnStand.IsEnabled = false;
+            }
+        }
+
+        private void UpdateDisplayScore()
+        {
+            LblPlayerScore.Content = PlayerValue.ToString();
+            LblCpuScore.Content = CpuValue.ToString();
+        }
+
+        private async void BtnDeel_Click(object sender, RoutedEventArgs e)
         {
             //Table preparation
+            Button_Enabling(false, false, false);
             Reset_Table();
+            LblPlayerScore.Content = "...";
+            LblCpuScore.Content = "...";
 
             //Verdeel 2 kaarten
             for (int i = 0; i < 2; i++)
             {
                 AddCard(PullCard(), true);
+                UpdateDisplayScore();
+                await Task.Delay(500);
             }
 
             //Fix overflow to Avoid getting 22
@@ -170,9 +236,11 @@ namespace Blackjack
 
             //GiveCpuCard
             AddCard(PullCard(), false);
+            UpdateDisplayScore();
+            await Task.Delay(500);
             //Secret Card
             CardName = "Card-Back";
-            SpnlCpuDeck.Children.Add(Card());
+            SpnlCpuDeck.Children.Add(Card(false));
 
             //Did we get a 21?
             if (PlayerValue == 21)
@@ -180,9 +248,8 @@ namespace Blackjack
                 Cpu_Turn(sender, e);
             }
 
-            //Display
-            LblPlayerScore.Content = PlayerValue.ToString();
-            LblCpuScore.Content = CpuValue.ToString();
+            //Re-enable the needed buttons
+            Button_Enabling(false, true, true);
         }
 
         private void BtnHit_Click(object sender, RoutedEventArgs e)
@@ -196,8 +263,7 @@ namespace Blackjack
             }
 
             //Display
-            LblPlayerScore.Content = PlayerValue.ToString();
-            LblCpuScore.Content = CpuValue.ToString();
+            UpdateDisplayScore();
         }
 
         private void BtnStand_Click(object sender, RoutedEventArgs e)
@@ -217,13 +283,13 @@ namespace Blackjack
             //Who pulled the card?
             if (Player)
             {
-                SpnlPlayerDeck.Children.Add(Card());
+                SpnlPlayerDeck.Children.Add(Card(Player));
                 PlayerDeck.Add(Deck.ElementAt(index));
                 PlayerHandValue.Add(CardValue());
             }
             else
             {
-                SpnlCpuDeck.Children.Add(Card());
+                SpnlCpuDeck.Children.Add(Card(Player));
                 CpuDeck.Add(Deck.ElementAt(index));
                 CpuHandValue.Add(CardValue());
             }
@@ -337,13 +403,13 @@ namespace Blackjack
             DeckValue();
         }
 
-        private void Cpu_Turn(object sender, RoutedEventArgs e)
+        private async void Cpu_Turn(object sender, RoutedEventArgs e)
         {
             //Enabling da buttons
-            BtnHit.IsEnabled = false;
-            BtnStand.IsEnabled = false;
-            BtnDeel.IsEnabled = true;
+            Button_Enabling(false, false, false);
 
+            //Wait
+            await Task.Delay(1200);
             //Remove Secret Card
             SpnlCpuDeck.Children.RemoveAt(SpnlCpuDeck.Children.Count - 1);
 
@@ -353,6 +419,8 @@ namespace Blackjack
             {
                 AddCard(PullCard(), false);
                 DeckValue();
+                UpdateDisplayScore();
+                await Task.Delay(500);
             }
 
             //Does CPU have a blackjack?
@@ -367,6 +435,7 @@ namespace Blackjack
             {
                 CheckSoft17(sender, e);
                 DeckValue();
+                UpdateDisplayScore();
             }
 
             //Keep pulling cards until we reach 17+
@@ -374,7 +443,12 @@ namespace Blackjack
             {
                 AddCard(PullCard(), false);
                 DeckValue();
+                UpdateDisplayScore();
+                await Task.Delay(500);
             }
+
+            //Wait
+            await Task.Delay(250);
 
             //Who won the game now?
             Match_Results();
@@ -453,9 +527,8 @@ namespace Blackjack
                 TxtResults.Foreground = Brushes.DarkOrange;
             }
 
-            //Display
-            LblPlayerScore.Content = PlayerValue.ToString();
-            LblCpuScore.Content = CpuValue.ToString();
+            //Enabling da buttons
+            Button_Enabling(true, false, false);
         }
     }
 }
