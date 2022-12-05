@@ -184,28 +184,34 @@ namespace Blackjack
             if (Deel)
             {
                 BtnDeel.IsEnabled = true;
+                BtnDeel.Visibility = Visibility.Visible;
             }
             else
             {
                 BtnDeel.IsEnabled = false;
+                BtnDeel.Visibility = Visibility.Collapsed;
             }
 
             if (Hit)
             {
                 BtnHit.IsEnabled = true;
+                BtnHit.Visibility = Visibility.Visible;
             }
             else
             {
                 BtnHit.IsEnabled = false;
+                BtnHit.Visibility = Visibility.Collapsed;
             }
 
             if (Stand)
             {
                 BtnStand.IsEnabled = true;
+                BtnStand.Visibility = Visibility.Visible;
             }
             else
             {
                 BtnStand.IsEnabled = false;
+                BtnStand.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -246,6 +252,7 @@ namespace Blackjack
             if (PlayerValue == 21)
             {
                 Cpu_Turn(sender, e);
+                return;
             }
 
             //Re-enable the needed buttons

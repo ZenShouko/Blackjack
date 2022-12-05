@@ -6,28 +6,27 @@
         xmlns:local="clr-namespace:Blackjack"
         mc:Ignorable="d" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight"
         Title="BlackJack" Height="auto" Width="auto">
-    <Grid Height="600" Width="850" Loaded="CreerDeck">
+    <Grid Height="700" Width="800" Loaded="CreerDeck">
         <Grid.Background>
             <ImageBrush ImageSource="/PNG/Casino_Texture.jpg" Stretch="None" TileMode="Tile" Viewport="0, 0, 100, 100" ViewportUnits="Absolute"/>
         </Grid.Background>
         <!--Definitions-->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="350"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2.5*"/>
+            <RowDefinition Height="2*"/>
             <RowDefinition Height="1.3*"/>
-            <RowDefinition Height="0.2*"/>
-            <RowDefinition Height="1.2*"/>
-            <RowDefinition Height="2.5*"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         
         <!--Cpu Side-->
-        <Border CornerRadius="3, 3, 12, 6" BorderBrush="White" BorderThickness="2, 5, 2, 3" Background="Black" Opacity="0.4" Grid.Column="1" Margin="0, 5" Width="400"/>
+        <Border CornerRadius="3, 3, 12, 6" BorderBrush="White" BorderThickness="2, 5, 2, 3" Background="Black" Opacity="0.4" Grid.Column="1" Margin="0, 5" Width="320"/>
         <DockPanel x:Name="SpnlCpuDeck" HorizontalAlignment="Center" Grid.Column="1" VerticalAlignment="Center"/>
-        <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115"/>
+        <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115" Grid.Column="2"/>
         <Label x:Name="LblCpuScore" Content="x" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
                FontFamily="Arial" Foreground="MintCream" Grid.Column="2"/>
         <Ellipse Width="120" Height="120" Fill="Lavender" Opacity="0.5" Grid.Column="0" Margin="0, 10, 0, 0"/>
@@ -46,23 +45,31 @@
                    HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" Foreground="White"/>
 
         <!--Buttons-->
-        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-            <Button Cursor="Hand" x:Name="BtnDeel" Content="Deel" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="150"
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+            <Button Cursor="Hand" x:Name="BtnDeel" Content="Deel" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
                 FontSize="24" Margin="15" Click="BtnDeel_Click" Background="AliceBlue"/>
-            <Button Cursor="Hand" x:Name="BtnHit" Content="Hit" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="150"
-                FontSize="24" Margin="15"  IsEnabled="False" Click="BtnHit_Click"/>
-            <Button Cursor="Hand" x:Name="BtnStand" Content="Stand" VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="150"
+            <Button Cursor="Hand" x:Name="BtnHit" Content="Hit" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
+                FontSize="24" Margin="15"  IsEnabled="False" Click="BtnHit_Click" Visibility="Visible"/>
+            <Button Cursor="Hand" x:Name="BtnStand" Content="Stand" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
                 FontSize="24" Margin="15"  IsEnabled="False" Click="BtnStand_Click"/>
         </StackPanel>
         
         <!--Player Side-->
-        <Border CornerRadius="3, 3, 12, 6" BorderBrush="White" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.4" Grid.Column="1" Grid.Row="4" Margin="0, 5" Width="400"/>
+        <!--PlayerDeck-->
+        <Border CornerRadius="3, 3, 12, 6" BorderBrush="White" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.4" Grid.Column="1" Grid.Row="4" Margin="0, 5" Width="320"/>
         <DockPanel x:Name="SpnlPlayerDeck" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115" Grid.Column="2" Grid.Row="4"/>
-        <Label x:Name="LblPlayerScore" Content="x" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
+        <!--PlayerScore-->
+        <Grid Grid.Column="0" Margin="10, 0" Grid.Row="2" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="Transparent" Width="115" Height="115">
+            <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115"/>
+            <Label x:Name="LblPlayerScore" Content="x" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
                FontFamily="Arial" Foreground="MintCream"/>
-        <Ellipse Width="120" Height="120" Fill="Lavender" Opacity="0.5" Grid.Row="4" Margin="0, 10, 0, 0"/>
-        <TextBlock x:Name="TxtPlayerIcon" Text="🤔" Grid.Row="4" FontSize="82" VerticalAlignment="Center" HorizontalAlignment="Center" 
-                   Foreground="Black" Opacity="0.9"/>
+        </Grid>
+        <!--PlayerIcon-->
+        <Canvas Grid.Row="2" Grid.RowSpan="2" Background="Transparent" Width="120" Height="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10, 0">
+            <Ellipse Width="120" Height="120" Fill="Lavender" Opacity="0.5" Margin="0, 0, 0, 0"/>
+            <TextBlock x:Name="TxtPlayerIcon" Text="🤔" Grid.Row="4" FontSize="82" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                   Foreground="Black" Margin="3 ,0"/>
+        </Canvas>
+        
     </Grid>
 </Window>
