@@ -45,13 +45,13 @@
                    HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" Foreground="White"/>
 
         <!--Buttons-->
-        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button Cursor="Hand" x:Name="BtnDeel" Content="Deel" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
                 FontSize="24" Margin="15" Click="BtnDeel_Click" Background="AliceBlue"/>
             <Button Cursor="Hand" x:Name="BtnHit" Content="Hit" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
-                FontSize="24" Margin="15"  IsEnabled="False" Click="BtnHit_Click" Visibility="Visible"/>
+                FontSize="24" Margin="15"  IsEnabled="False" Click="BtnHit_Click" Visibility="Collapsed"/>
             <Button Cursor="Hand" x:Name="BtnStand" Content="Stand" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
-                FontSize="24" Margin="15"  IsEnabled="False" Click="BtnStand_Click"/>
+                FontSize="24" Margin="15"  IsEnabled="False" Click="BtnStand_Click" Visibility="Collapsed"/>
         </StackPanel>
         
         <!--Player Side-->
