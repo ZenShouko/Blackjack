@@ -163,5 +163,13 @@
   <ItemGroup>
     <Resource Include="PNG\Neon_Background.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Chips\Chip-1.png" />
+    <Resource Include="Chips\Chip-10.png" />
+    <Resource Include="Chips\Chip-2.png" />
+    <Resource Include="Chips\Chip-20.png" />
+    <Resource Include="Chips\Chip-5.png" />
+    <Resource Include="Chips\Chip-50.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

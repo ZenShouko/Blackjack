@@ -24,6 +24,7 @@ namespace Blackjack
         public MainWindow()
         {
             InitializeComponent();
+            ResizeDeck();
         }
 
 
@@ -51,14 +52,14 @@ namespace Blackjack
             //Match margin so they stack on top of each other. [1st card margin 0, all others -85]
             if (Player)
             {
-                if (SpnlPlayerDeck.Children.Count != 0)
+                if (PlayerDeckPanel.Children.Count != 0)
                 {
                     LeftMargin = -85;
                 }
             }
             else
             {
-                if (SpnlCpuDeck.Children.Count != 0)
+                if (CpuDeckPanel.Children.Count != 0)
                 {
                     LeftMargin = -85;
                 }
@@ -167,8 +168,8 @@ namespace Blackjack
             CpuHandValue.Clear();
 
             //CardDisplay
-            SpnlPlayerDeck.Children.Clear();
-            SpnlCpuDeck.Children.Clear();
+            PlayerDeckPanel.Children.Clear();
+            CpuDeckPanel.Children.Clear();
 
             //Reseting values
             Soft17Clear = false;
@@ -221,6 +222,33 @@ namespace Blackjack
             LblCpuScore.Content = CpuValue.ToString();
         }
 
+        private void ResizeDeck()
+        {
+            int PlayerSize = 0;
+            int CpuSize = 0;
+
+            if (PlayerDeckPanel.Children.Count > 0)
+            {
+                PlayerSize = 110;
+            }
+            if (CpuDeckPanel.Children.Count > 0)
+            {
+                CpuSize = 110;
+            }
+
+            foreach (var item in PlayerDeckPanel.Children)
+            {
+                PlayerSize += 20;
+            }
+            foreach (var item in CpuDeckPanel.Children)
+            {
+                CpuSize += 20;
+            }
+
+            PlayerDeckPanelBorder.Width = PlayerSize;
+            CpuDeckPanelBorder.Width = CpuSize;
+        }
+
         private async void BtnDeel_Click(object sender, RoutedEventArgs e)
         {
             //Table preparation
@@ -246,7 +274,8 @@ namespace Blackjack
             await Task.Delay(500);
             //Secret Card
             CardName = "Card-Back";
-            SpnlCpuDeck.Children.Add(Card(false));
+            CpuDeckPanel.Children.Add(Card(false));
+            ResizeDeck();
 
             //Did we get a 21?
             if (PlayerValue == 21)
@@ -290,18 +319,19 @@ namespace Blackjack
             //Who pulled the card?
             if (Player)
             {
-                SpnlPlayerDeck.Children.Add(Card(Player));
+                PlayerDeckPanel.Children.Add(Card(Player));
                 PlayerDeck.Add(Deck.ElementAt(index));
                 PlayerHandValue.Add(CardValue());
             }
             else
             {
-                SpnlCpuDeck.Children.Add(Card(Player));
+                CpuDeckPanel.Children.Add(Card(Player));
                 CpuDeck.Add(Deck.ElementAt(index));
                 CpuHandValue.Add(CardValue());
             }
 
             DeckValue();
+            ResizeDeck();
         }
 
         void FixOverFlow(object sender, RoutedEventArgs e, bool Player)
@@ -418,7 +448,7 @@ namespace Blackjack
             //Wait
             await Task.Delay(1200);
             //Remove Secret Card
-            SpnlCpuDeck.Children.RemoveAt(SpnlCpuDeck.Children.Count - 1);
+            CpuDeckPanel.Children.RemoveAt(CpuDeckPanel.Children.Count - 1);
 
             //Keep pulling cards until we reach 17+
             DeckValue();
