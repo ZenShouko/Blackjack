@@ -27,7 +27,6 @@ namespace Blackjack
             ResizeDeck();
         }
 
-
         //Lijsten
         List<string> Deck = new List<string>(); //ALL 52 CARDS IN THE GAME
         List<string> CardsInGame = new List<string>(); //ALL CARDS IN USE (player and cpu combined)
@@ -35,12 +34,16 @@ namespace Blackjack
         List<string> CpuDeck = new List<string>(); //ALL CARDS CPU
         List<int> PlayerHandValue = new List<int>(); //ALL CARD VALUES FROM PLAYER
         List<int> CpuHandValue = new List<int>(); //ALL CARD VALUES FROM CPU
+        //BETTING
+        int Money = 100;
+        int Bet = 0;
         //Andere Variabelen
         Random random = new Random();
         bool Soft17Clear = false;
         int PlayerValue;
         int CpuValue;
         string CardName;
+
 
 
         public Image Card(bool Player)
@@ -166,6 +169,8 @@ namespace Blackjack
             //Cards Value
             PlayerHandValue.Clear();
             CpuHandValue.Clear();
+            PlayerValue = 0;
+            CpuValue = 0;
 
             //CardDisplay
             PlayerDeckPanel.Children.Clear();
@@ -173,46 +178,48 @@ namespace Blackjack
 
             //Reseting values
             Soft17Clear = false;
-            TxtResults.Text = "...";
             TxtResults.Foreground = Brushes.White;
             TxtPlayerIcon.Text = "🤔";
             LblCpuScore.FontWeight = FontWeights.Regular;
             LblPlayerScore.FontWeight = FontWeights.Regular;
         }
 
-        private void Button_Enabling(bool Deel, bool Hit, bool Stand)
+        private void Button_Enabling(bool Deel, bool Hit, bool Stand, bool Changebet)
         {
             if (Deel)
             {
-                BtnDeel.IsEnabled = true;
                 BtnDeel.Visibility = Visibility.Visible;
             }
             else
             {
-                BtnDeel.IsEnabled = false;
                 BtnDeel.Visibility = Visibility.Collapsed;
             }
 
             if (Hit)
             {
-                BtnHit.IsEnabled = true;
                 BtnHit.Visibility = Visibility.Visible;
             }
             else
             {
-                BtnHit.IsEnabled = false;
                 BtnHit.Visibility = Visibility.Collapsed;
             }
 
             if (Stand)
             {
-                BtnStand.IsEnabled = true;
                 BtnStand.Visibility = Visibility.Visible;
             }
             else
             {
-                BtnStand.IsEnabled = false;
                 BtnStand.Visibility = Visibility.Collapsed;
+            }
+
+            if (Changebet)
+            {
+                BtnChangeBet.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                BtnChangeBet.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -248,14 +255,135 @@ namespace Blackjack
             PlayerDeckPanelBorder.Width = PlayerSize;
             CpuDeckPanelBorder.Width = CpuSize;
         }
+        
+        private void UpdateResultText(string Text, string TextColor)
+        {
+            TxtResults.Text = Text;
+
+            switch (TextColor)
+            {
+                case "White":
+                    {
+                        TxtResults.Foreground = Brushes.White;
+                        break;
+                    }
+                case "Red":
+                    {
+                        TxtResults.Foreground = Brushes.Red;
+                        break;
+                    }
+                case "Green":
+                    {
+                        TxtResults.Foreground = Brushes.Green;
+                        break;
+                    }
+            }
+        }
+
+        private async void DisplayDeck(bool ShowPlayerDeck)
+        {
+            //If PlayerDeck needs to be displayed, it means betpanel is on screen, so we shift betpanel away and pull playerdeck.
+            //Betpanel on screen: Bottom-Margin = 10; Offscreen: Bottom-Margin = -200;
+            //PlayerDeckPanelBorder and PlayerDeckPanel Only need visibility change When getting Displayed, ELSE same rules as The Table.
+            //Only Playertable moves up. On screen margin = 0; Offscreen margin = 0, 200, 0, -200
+            //CPU's Deck fades away. Panel = 1; Border = 0.4;
+            int BetMargin;
+            int DeckMargin;
+            double DeckPanelOpacity = CpuDeckPanel.Opacity;
+            double PanelBorderOpacity = CpuDeckPanelBorder.Opacity;
+
+            if (ShowPlayerDeck)
+            {
+                //Move BetPanel Down
+                BetMargin = 10;
+                while(BetMargin > -380)
+                {
+                    BetMargin -= 15;
+                    BetPanel.Margin = new Thickness(0, 0, 0, BetMargin);
+                    await Task.Delay(25);
+                }
+
+                //Reset Table for Next Game
+                Reset_Table();
+                ResizeDeck();
+                UpdateDisplayScore();
+
+                //CPU DECK VISIBLE
+                CpuDeckPanel.Opacity = 1;
+                CpuDeckPanelBorder.Opacity = 0.4;
+
+                //Move PlayerDeck Up
+                DeckMargin = 200;
+                while(DeckMargin > 0)
+                {
+                    DeckMargin -= 10;
+                    PlayerTable.Margin = new Thickness(0, DeckMargin, 0, (DeckMargin - (DeckMargin * 2)));
+                    await Task.Delay(25);
+                }
+
+                PlayerDeckPanel.Margin = new Thickness(0);
+                PlayerDeckPanelBorder.Margin = new Thickness(0);
+                PlayerDeckPanel.Visibility = Visibility.Visible;
+                PlayerDeckPanelBorder.Visibility = Visibility.Visible;
+
+                //Show buttons
+                Button_Enabling(true, false, false, false);
+
+                //Edit Result Text
+                await Task.Delay(2000);
+                if (PlayerDeckPanel.Children.Count == 0)
+                {
+                    UpdateResultText("Make a Play.", "White");
+                }
+            }
+            else
+            {
+                //Move PlayerDeck down AND CPU DECK FADE
+                DeckMargin = 0;
+                while (DeckMargin <= 200)
+                {
+                    DeckMargin += 10;
+                    PlayerTable.Margin = new Thickness(0, DeckMargin, 0, (DeckMargin - (DeckMargin * 2)));
+                    PlayerDeckPanelBorder.Margin = new Thickness(0, DeckMargin, 0, (DeckMargin - (DeckMargin * 2)));
+                    PlayerDeckPanel.Margin = new Thickness(0, DeckMargin, 0, (DeckMargin - (DeckMargin * 2)));
+
+                    if (DeckPanelOpacity != 0)
+                    {
+                        DeckPanelOpacity -= 0.05;
+                        CpuDeckPanel.Opacity = DeckPanelOpacity;
+                        PanelBorderOpacity -= 0.02;
+                        CpuDeckPanelBorder.Opacity = PanelBorderOpacity;
+                    }
+                    await Task.Delay(25);
+                }
+
+                //Edit Result text
+                UpdateResultText("Place your bet!", "White");
+
+                //Reset Table
+                Reset_Table();
+                ResizeDeck();
+                UpdateDisplayScore();
+
+                //Move BetPanel Up
+                BetMargin = -390;
+                while (BetMargin < 10)
+                {
+                    BetMargin += 15;
+                    BetPanel.Margin = new Thickness(0, 0, 0, BetMargin);
+                    await Task.Delay(25);
+                }
+            }
+        }
 
         private async void BtnDeel_Click(object sender, RoutedEventArgs e)
         {
             //Table preparation
-            Button_Enabling(false, false, false);
+            Button_Enabling(false, false, false, false);
             Reset_Table();
             LblPlayerScore.Content = "...";
             LblCpuScore.Content = "...";
+            UpdateResultText("...", "White");
 
             //Verdeel 2 kaarten
             for (int i = 0; i < 2; i++)
@@ -285,7 +413,7 @@ namespace Blackjack
             }
 
             //Re-enable the needed buttons
-            Button_Enabling(false, true, true);
+            Button_Enabling(false, true, true, false);
         }
 
         private void BtnHit_Click(object sender, RoutedEventArgs e)
@@ -443,7 +571,9 @@ namespace Blackjack
         private async void Cpu_Turn(object sender, RoutedEventArgs e)
         {
             //Enabling da buttons
-            Button_Enabling(false, false, false);
+            Button_Enabling(false, false, false, false);
+            //Update text
+            UpdateResultText("CPU Turn.", "White");
 
             //Wait
             await Task.Delay(1200);
@@ -565,7 +695,63 @@ namespace Blackjack
             }
 
             //Enabling da buttons
-            Button_Enabling(true, false, false);
+            Button_Enabling(false, false, false, true);
+        }
+
+        private void BtnBet_Click(object sender, RoutedEventArgs e)
+        {
+            //Reset Bet Amount to 100% if given amount is higher than 100%
+            bool BetParse = int.TryParse(TxtBetAmount.Text, out Bet);
+
+            if (!BetParse)
+            {
+                UpdateResultText("Bet not accepted.", "White");
+                return;
+            }
+
+            if (Bet > Money)
+            {
+                Bet = Money;
+            }
+            else if (Bet < (Money / 10) && 10 < Money) //Minimum Bet Requirement (Only if player has more than €10)
+            {
+                Bet = Money / 10;
+            }
+
+            //Hide BetPanel Show PlayerDeck
+            DisplayDeck(true);
+
+            //Display Bet acceptance
+            UpdateResultText($"€{Bet} has been bet!", "White");
+        }
+
+        private void BtnReset_Click(object sender, RoutedEventArgs e)
+        {
+            SldAmount.Value = SldAmount.Minimum;
+            TxtBetAmount.Text = (Money / 10).ToString();
+        }
+
+        private void SldAmount_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            TxtBetAmount.Text = SldAmount.Value.ToString();
+        }
+
+        private void TxtBetAmount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //Reset hoeveelheid naar 10% als een foutief waarde is ingevoerd
+            //bool Gelukt = double.TryParse(TxtBetAmount.Text, out double Amount);
+            //if (!Gelukt)
+            //{
+            //    Amount = Money / 10;
+            //}
+
+            //SldAmount.Value = double.Parse(TxtBetAmount.Text);
+        }
+
+        private void BtnChangeBet_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayDeck(false);
+            Button_Enabling(false, false, false, false);
         }
     }
 }

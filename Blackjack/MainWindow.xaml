@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Blackjack"
         mc:Ignorable="d" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight"
         Title="BlackJack" Height="auto" Width="auto">
-    <Grid Height="650" Width="800" Loaded="CreerDeck">
+    <Grid Height="625" Width="800" Loaded="CreerDeck">
         <Grid.Background>
             <ImageBrush ImageSource="/PNG/Casino_Texture.jpg" Stretch="None" TileMode="Tile" Viewport="0, 0, 100, 100" ViewportUnits="Absolute"/>
         </Grid.Background>
@@ -19,94 +19,98 @@
             <ColumnDefinition Width="140"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="1.3*"/>
-            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="1.1*"/>
+            <RowDefinition Height="0.9*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         
+        <!--HEADER-->
+        <Border Grid.ColumnSpan="5" Background="Black" Opacity="0.65" Margin="0, 0, 0, 5"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="0, 0, 0, 5">
+            <TextBlock Text="BET: " Foreground="White"/>
+            <TextBlock Text="€10" Foreground="White"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Margin="0, 0, 0, 5">
+            <TextBlock Text="WIN= €110 || LOSE= €90" Foreground="White"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="3" Grid.ColumnSpan="2" Margin="0, 0, 0, 5">
+            <TextBlock Text="WON= 5 || LOST= 7" Foreground="White"/>
+        </StackPanel>
+
         <!--Cpu Side-->
-        <Border x:Name="CpuTable" Opacity="0.3" Background="Black" BorderBrush="Lavender" BorderThickness="5" CornerRadius="20" Grid.Column="2" Grid.Row="0" Margin="0"/>
+        <Border x:Name="CpuTable" Opacity="0.3" Background="Black" BorderBrush="Lavender" BorderThickness="5" CornerRadius="20" Grid.Column="2" Grid.Row="1" Margin="0"/>
         <Border x:Name="CpuDeckPanelBorder" CornerRadius="10, 10, 20, 16" BorderBrush="BlueViolet" BorderThickness="2, 5, 2, 3" Background="Black" Opacity="0.4" 
-                Grid.Column="2" Margin="0, 5" Width="320" Height="175"/>
-        <DockPanel x:Name="CpuDeckPanel" HorizontalAlignment="Center" Grid.Column="2" VerticalAlignment="Center"/>
-        <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115" Grid.Column="3" Grid.ColumnSpan="2"/>
+                Grid.Column="2" Grid.Row="1" Margin="0, 5" Width="320" Height="175"/>
+        <DockPanel x:Name="CpuDeckPanel" HorizontalAlignment="Center" Grid.Column="2" Grid.Row="1" VerticalAlignment="Center"/>
+        <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1"/>
         <Label x:Name="LblCpuScore" Content="x" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
-               FontFamily="Arial" Foreground="MintCream" Grid.Column="3" Grid.ColumnSpan="2"/>
-        <Ellipse Width="120" Height="120" Fill="Lavender" Opacity="0.5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0, 10, 0, 0"/>
-        <TextBlock x:Name="TxtCpuIcon" Text="🤖" Grid.Column="0" Grid.ColumnSpan="2" FontSize="82" VerticalAlignment="Center" HorizontalAlignment="Center" 
+               FontFamily="Arial" Foreground="MintCream" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1"/>
+        <Ellipse Width="120" Height="120" Fill="Lavender" Opacity="0.5" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Margin="0, 10, 0, 0"/>
+        <TextBlock x:Name="TxtCpuIcon" Text="🤖" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" FontSize="82" VerticalAlignment="Center" HorizontalAlignment="Center" 
                    Foreground="Black"/>
         
         <!--Match Results-->
-        <Border BorderBrush="Black" BorderThickness="2" CornerRadius="50" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Margin="10, 5" >
+        <Border BorderBrush="Black" BorderThickness="2" CornerRadius="50" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" Margin="10" >
             <Border.Background>
                 <ImageBrush ImageSource="\PNG\Neon_Background.jpg" />
             </Border.Background>
         </Border>
-        <Border Background="Black" Opacity="0.4" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Margin="10" CornerRadius="100">
+        <Border Background="Black" Opacity="0.4" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" Margin="12" CornerRadius="100">
         </Border>
-            <TextBlock x:Name="TxtResults" Text="Place Your Bet!" FontSize="52" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" 
+            <TextBlock x:Name="TxtResults" Text="Place Your Bet!" FontSize="46" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" 
                    HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" Foreground="White"/>
 
         <!--Buttons-->
-        <StackPanel Visibility="Collapsed" Orientation="Horizontal" Grid.Column="2" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+        <StackPanel Visibility="Visible" Orientation="Horizontal" Grid.Column="2" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button Cursor="Hand" x:Name="BtnDeel" Content="Deel" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
-                FontSize="24" Margin="15" Click="BtnDeel_Click" Background="AliceBlue"/>
+                FontSize="24" Margin="15" Click="BtnDeel_Click" Background="AliceBlue" Visibility="Visible"/>
             <Button Cursor="Hand" x:Name="BtnHit" Content="Hit" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
-                FontSize="24" Margin="15"  IsEnabled="False" Click="BtnHit_Click" Visibility="Collapsed"/>
+                FontSize="24" Margin="15" Click="BtnHit_Click" Visibility="Collapsed"/>
             <Button Cursor="Hand" x:Name="BtnStand" Content="Stand" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
-                FontSize="24" Margin="15"  IsEnabled="False" Click="BtnStand_Click" Visibility="Collapsed"/>
+                FontSize="24" Margin="15" Click="BtnStand_Click" Visibility="Collapsed"/>
+            <Button Cursor="Hand" x:Name="BtnChangeBet" Content="Change Bet" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
+                FontSize="20" Margin="15" Click="BtnChangeBet_Click" Visibility="Collapsed"/>
         </StackPanel>
-        <!--Bet Display-->
-        <StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" Background="Gray" Width="350" Margin="0, 10">
-            <TextBlock Text="Place your bet." FontSize="28" HorizontalAlignment="Center"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Label Content="Amount: " FontSize="18"/>
-                <TextBox x:Name="TxtBetAmount" Text="0" FontSize="18" Width="50" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MaxLength="4"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                <Button x:Name="BtnBet" Content="Bet" FontSize="18" Width="60" Padding="4, 0" BorderThickness="2" Margin="5, 0" Cursor="Hand"/>
-                <Button x:Name="BtnReset" Content="Reset" FontSize="18" Width="60" Padding="4, 0" BorderThickness="2" Margin="5, 0" Cursor="Hand"/>
-            </StackPanel>
-        </StackPanel>
-        <!--Balance-->
-        <Grid Grid.Row="2" Grid.ColumnSpan="2" Background="LightGray" Margin="50, 10">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Balance:" FontSize="18" Margin="0, 0, 40, 0"/>
-                <TextBlock x:Name="TxtBalance" Text="100" FontSize="20" FontWeight="Bold" Margin="10, 4"/>
-            </StackPanel>
-        </Grid>
-        
+
         <!--Player Side-->
-        <Border Visibility="Collapsed" x:Name="PlayerTable" Opacity="0.3" Background="Black" BorderBrush="Lavender" BorderThickness="5" CornerRadius="20" Grid.Column="2" Grid.Row="4" Margin="0"/>
+        <Border Visibility="Visible" x:Name="PlayerTable" Opacity="0.3" Background="Black" BorderBrush="Lavender" BorderThickness="5" CornerRadius="20" Grid.Column="2" Grid.Row="4" Margin="0, 200, 0, -200"/>
         <!--PlayerDeck-->
         <Border Visibility="Collapsed" x:Name="PlayerDeckPanelBorder" CornerRadius="10, 10, 20, 16" BorderBrush="DarkSlateGray" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.6" 
                 Grid.Column="2" Grid.Row="4" Margin="0, 5" Width="320" Height="175"/>
         <DockPanel Visibility="Collapsed" x:Name="PlayerDeckPanel" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <!--PlayerScore-->
-        <Grid Visibility="Collapsed" Grid.Column="4" Grid.ColumnSpan="1" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Width="115" Height="115"
+        <Grid Visibility="Visible" Grid.Column="4" Grid.ColumnSpan="1" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Width="115" Height="115"
               Margin="-100, 0, 0, 0">
             <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115"/>
             <Label x:Name="LblPlayerScore" Content="x" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
                FontFamily="Arial" Foreground="MintCream"/>
         </Grid>
         <!--PlayerIcon-->
-        <Canvas Visibility="Collapsed" Grid.Row="3" Background="Transparent" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100, 0, 0, 0">
+        <Canvas Visibility="Visible" Grid.Row="4" Background="Transparent" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100, 0, 0, 0">
             <Ellipse Width="120" Height="120" Fill="Lavender" Opacity="0.5" Margin="0, 0, 0, 0"/>
-            <TextBlock x:Name="TxtPlayerIcon" Text="🤔" Grid.Row="4" FontSize="82" VerticalAlignment="Center" HorizontalAlignment="Center" 
+            <TextBlock x:Name="TxtPlayerIcon" Text="🤔" FontSize="82" VerticalAlignment="Center" HorizontalAlignment="Center" 
                    Foreground="Black" Margin="3 ,0"/>
         </Canvas>
+        
         <!--BetPanel-->
-        <StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Orientation="Horizontal" Background="White" CanHorizontallyScroll="True" Height="100" Margin="0, 0, 0, 10">
-            <Button Content="Left"/>
-            <Image Source="/Chips/Chip-20.png" Cursor="Hand" Margin="5" Height="50"/>
-            <Image Source="/Chips/Chip-50.png" Cursor="Hand" Margin="5" Height="50"/>
-            <Grid HorizontalAlignment="Center">
-                <Border BorderBrush="Black" BorderThickness="2" Height="64" Width="65" CornerRadius="31" Cursor="Hand"/>
-                <Ellipse Width="62" Height="62" Fill="Lavender" Cursor="Hand"/>
-                <Ellipse Width="40" Height="40" Fill="White" Cursor="Hand" Opacity="0.2"/>
-                <TextBlock Text="10$" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand"/>
-            </Grid>
+        <StackPanel x:Name="BetPanel" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="4" Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                    Height="180" Width="400" Margin="0, 0, 0, 10">
+            <StackPanel Orientation="Horizontal" Background="LightGray" HorizontalAlignment="Center">
+                <TextBlock x:Name="TxtAmount" Text="€100" FontSize="14" HorizontalAlignment="Center" Margin="100, 0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="15">
+                <TextBlock Text="Amount:" FontSize="20"/>
+                <TextBox x:Name="TxtBetAmount" Text="10" IsReadOnly="True" Width="55" MaxLength="5" Margin="15, 0" FontSize="18" FontWeight="Bold" HorizontalContentAlignment="Center" 
+                         BorderThickness="2" BorderBrush="Black" TextChanged="TxtBetAmount_TextChanged"/>
+            </StackPanel>
+            <Slider x:Name="SldAmount" Value="10" Maximum="100" Width="200" Height="auto" TickPlacement="Both" TickFrequency="10" SmallChange="10" LargeChange="50" 
+                    BorderThickness="1" BorderBrush="Lavender" IsSnapToTickEnabled="True" ValueChanged="SldAmount_ValueChanged"/>
+            <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
+                <Button x:Name="BtnBet" Content="Bet" FontWeight="Bold" Width="60" Height="24" BorderBrush="Black" BorderThickness="2" Background="GreenYellow" Cursor="Hand" Margin="5, 0" Click="BtnBet_Click"/>
+                <Button x:Name="BtnReset" Content="Reset" FontWeight="Bold" Width="60" Height="24" BorderBrush="Black" BorderThickness="2" Background="Crimson" Cursor="Hand" Margin="5, 0" Click="BtnReset_Click"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>
