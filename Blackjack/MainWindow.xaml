@@ -83,7 +83,7 @@
             <Button Cursor="Hand" x:Name="BtnContinue" Content="Continue" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
                 FontSize="20" Margin="15" Click="BtnContinue_Click" Visibility="Collapsed"/>
             <Button Cursor="Hand" x:Name="BtnNewGame" Content="New Game" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
-                FontSize="20" Margin="15" Click="BtnNewGame_Click" Visibility="Collapsed"/>
+                FontSize="20" Margin="15" Click="BtnNewGame_Click" Visibility="Visible"/>
         </StackPanel>
 
         <!--Player Side-->
