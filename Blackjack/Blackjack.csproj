@@ -164,9 +164,6 @@
     <Resource Include="PNG\Neon_Background.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="PNG\Cards-Deck.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="PNG\CardsDeck.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
