@@ -886,6 +886,9 @@ namespace Blackjack
 
         private async void BtnNewGame_Click(object sender, RoutedEventArgs e)
         {
+            CardsInGame.Clear();
+            TxtDeckCount.Text = (Deck.Count - CardsInGame.Count).ToString();
+            Button_Enabling(false, false, false, false, false, false);
             Money = 100;
             DisplayDeck(false);
             await Task.Delay(500);
