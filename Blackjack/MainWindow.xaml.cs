@@ -613,7 +613,10 @@ namespace Blackjack
             {
                 AddCard(PullCard(), false);
                 DeckValue();
-                UpdateDisplayScore();
+                if (CpuValue < 22)
+                {
+                    UpdateDisplayScore();
+                }
                 await Task.Delay(500);
             }
 
@@ -632,6 +635,7 @@ namespace Blackjack
                 UpdateDisplayScore();
             }
 
+            UpdateDisplayScore();
             //Keep pulling cards until we reach 17+
             while (CpuValue < 17)
             {
