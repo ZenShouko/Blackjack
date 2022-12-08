@@ -92,6 +92,12 @@ namespace Blackjack
 
         public int PullCard()
         {
+            //Reshuffle AllCards if all cards have been played
+            if (CardsInGame.Count == Deck.Count())
+            {
+                CardsInGame.Clear();
+            }
+
             //Pull a random card that does not exist in the game yet
             int index = random.Next(0, 52);
 
@@ -164,7 +170,7 @@ namespace Blackjack
         {
             //Maak lijst leeg
             //Cards
-            CardsInGame.Clear();
+            //CardsInGame.Clear();
             PlayerDeck.Clear();
             CpuDeck.Clear();
 
@@ -470,6 +476,9 @@ namespace Blackjack
             CardName = Deck.ElementAt(index);
             //Add card to the game (Card List)
             CardsInGame.Add(Deck.ElementAt(index));
+            //Show how many cards are left in Deck
+            int CardsLeft = Deck.Count - CardsInGame.Count;
+            TxtDeckCount.Text = CardsLeft.ToString();
 
             //Who pulled the card?
             if (Player)
