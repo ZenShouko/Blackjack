@@ -625,8 +625,8 @@ namespace Blackjack
                 if (CpuValue < 22)
                 {
                     UpdateDisplayScore();
+                    await Task.Delay(500);
                 }
-                await Task.Delay(500);
             }
 
             //Does CPU have a blackjack?
