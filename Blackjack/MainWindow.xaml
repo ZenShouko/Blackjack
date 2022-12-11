@@ -6,6 +6,107 @@
         xmlns:local="clr-namespace:Blackjack"
         mc:Ignorable="d" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight"
         Title="BlackJack" Height="auto" Width="auto">
+    <Window.Resources>
+        <!--Default buttons-->
+        <Style TargetType="{x:Type Button}" x:Key="DefaultButton">
+            <!--Round Corners-->
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="22"/>
+                </Style>
+            </Style.Resources>
+            <!--Default Styles-->
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="15"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Background" Value="#6745F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Setter Property="Template">
+                <!--?? Important-->
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!--Setting Hover and click effect-->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#5032CD"/>
+                    <Setter Property="Foreground" Value="WhiteSmoke"/>
+                </Trigger>
+                <Trigger Property="IsMouseCaptured" Value="True">
+                    <Setter Property="Background" Value="Purple"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--Betting Buttons-->
+        <Style TargetType="{x:Type Button}" x:Key="BetButton">
+            <!--Round Corners-->
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="16"/>
+                </Style>
+            </Style.Resources>
+            <!--Default Styles-->
+            <Setter Property="Margin" Value="5, 0"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="62"/>
+            <Setter Property="Background" Value="YellowGreen"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <!--?? Important-->
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="Black" BorderThickness="2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!--Setting Hover and click effect-->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="GreenYellow"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+                <Trigger Property="IsMouseCaptured" Value="True">
+                    <Setter Property="Background" Value="Purple"/>
+                    <Setter Property="Foreground" Value="WhiteSmoke"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource BetButton}" x:Key="ResetButton">
+            <Setter Property="Background" Value="#EEE035"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <!--Setting Hover and click effect-->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#D9CC33"/>
+                </Trigger>
+                <Trigger Property="IsMouseCaptured" Value="True">
+                    <Setter Property="Background" Value="Purple"/>
+                    <Setter Property="Foreground" Value="WhiteSmoke"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
     <Grid Height="625" Width="800" Loaded="CreerDeck">
         <Grid.Background>
             <ImageBrush ImageSource="/PNG/Casino_Texture.jpg" Stretch="None" TileMode="Tile" Viewport="0, 0, 100, 100" ViewportUnits="Absolute"/>
@@ -72,18 +173,12 @@
         
         <!--Buttons-->
         <StackPanel Visibility="Visible" Orientation="Horizontal" Grid.Column="2" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-            <Button Cursor="Hand" x:Name="BtnDeel" Content="Deel" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
-                FontSize="24" Margin="15" Click="BtnDeel_Click" Background="AliceBlue" Visibility="Collapsed"/>
-            <Button Cursor="Hand" x:Name="BtnHit" Content="Hit" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
-                FontSize="24" Margin="15" Click="BtnHit_Click" Visibility="Collapsed"/>
-            <Button Cursor="Hand" x:Name="BtnStand" Content="Stand" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
-                FontSize="24" Margin="15" Click="BtnStand_Click" Visibility="Collapsed"/>
-            <Button Cursor="Hand" x:Name="BtnChangeBet" Content="Change Bet" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
-                FontSize="20" Margin="15" Click="BtnChangeBet_Click" Visibility="Collapsed"/>
-            <Button Cursor="Hand" x:Name="BtnContinue" Content="Continue" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
-                FontSize="20" Margin="15" Click="BtnContinue_Click" Visibility="Collapsed"/>
-            <Button Cursor="Hand" x:Name="BtnNewGame" Content="New Game" VerticalAlignment="Center" HorizontalAlignment="Center" Height="45" Width="120"
-                FontSize="20" Margin="15" Click="BtnNewGame_Click" Visibility="Visible"/>
+            <Button Style="{StaticResource DefaultButton}" x:Name="BtnDeel" Content="✨Start✨" Click="BtnDeel_Click"/>
+            <Button Style="{StaticResource DefaultButton}" x:Name="BtnHit" Content="Hit" Click="BtnHit_Click"/>
+            <Button Style="{StaticResource DefaultButton}" x:Name="BtnStand" Content="Stand" Click="BtnStand_Click"/>
+            <Button Style="{StaticResource DefaultButton}" x:Name="BtnChangeBet" Content="Change Bet" Click="BtnChangeBet_Click" FontSize="18"/>
+            <Button Style="{StaticResource DefaultButton}" x:Name="BtnContinue" Content="Continue" Click="BtnContinue_Click" FontSize="20"/>
+            <Button Style="{StaticResource DefaultButton}" x:Name="BtnNewGame" Content="New Game" Click="BtnNewGame_Click" FontSize="20"/>
         </StackPanel>
 
         <!--Player Side-->
@@ -122,8 +217,8 @@
             <Slider x:Name="SldAmount" Value="10" Maximum="100" Minimum="10" Width="200" Height="auto" TickPlacement="Both" TickFrequency="10" SmallChange="10" LargeChange="50" 
                     BorderThickness="1" BorderBrush="Lavender" IsSnapToTickEnabled="True" ValueChanged="SldAmount_ValueChanged"/>
             <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
-                <Button x:Name="BtnBet" Content="Bet" FontWeight="Bold" Width="60" Height="24" BorderBrush="Black" BorderThickness="2" Background="GreenYellow" Cursor="Hand" Margin="5, 0" Click="BtnBet_Click"/>
-                <Button x:Name="BtnReset" Content="Reset" FontWeight="Bold" Width="60" Height="24" BorderBrush="Black" BorderThickness="2" Background="Crimson" Cursor="Hand" Margin="5, 0" Click="BtnReset_Click"/>
+                <Button Style="{StaticResource BetButton}" x:Name="BtnBet" Content="Bet" Click="BtnBet_Click"/>
+                <Button Style="{StaticResource ResetButton}" x:Name="BtnReset" Content="Reset" Click="BtnReset_Click"/>
             </StackPanel>
         </StackPanel>
     </Grid>
