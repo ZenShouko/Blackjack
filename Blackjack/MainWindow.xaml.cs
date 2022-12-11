@@ -26,7 +26,7 @@ namespace Blackjack
             InitializeComponent();
             Reset_Table();
             ResizeDeck();
-            MoneyRelatedActions();
+            MoneyRelatedActions(Bet);
         }
 
         //Lijsten
@@ -306,6 +306,16 @@ namespace Blackjack
                         TxtResults.Foreground = Brushes.Green;
                         break;
                     }
+                case "Orange":
+                    {
+                        TxtResults.Foreground = Brushes.Orange;
+                        break;
+                    }
+                case "Gold":
+                    {
+                        TxtResults.Foreground = Brushes.Gold;
+                        break;
+                    }
             }
         }
 
@@ -337,7 +347,7 @@ namespace Blackjack
                 Reset_Table();
                 ResizeDeck();
                 UpdateDisplayScore();
-                MoneyRelatedActions();
+                MoneyRelatedActions(Bet);
 
                 //CPU DECK VISIBLE
                 CpuDeckPanel.Opacity = 1;
@@ -395,7 +405,7 @@ namespace Blackjack
                 Reset_Table();
                 ResizeDeck();
                 UpdateDisplayScore();
-                MoneyRelatedActions();
+                MoneyRelatedActions(Bet);
 
                 //Move BetPanel Up
                 BetMargin = -390;
@@ -747,36 +757,39 @@ namespace Blackjack
                     float i = Bet * 2.5f;
                     Math.Round(i);
                     Money += int.Parse(i.ToString());
-                    TxtResults.Text += $" €{i}";
+                    UpdateResultText($"BLACKJACK! + €{i}", "Gold"); //Override default "Won x amount" text
                 }
                 else
                 {
-                    Money += Bet * 2;
+                    Money += Bet;
                     TxtResults.Text += $" €{Bet * 2}";
                 }
             }
             else if (Result == "Draw")
             {
-                Money += Bet;
+                //Money += Bet;
             }
             else
             {
+                Money -= Bet;
                 TxtResults.Text += $" €{Bet}";
             }
 
+            //Update Header
+            MoneyRelatedActions(Bet);
             //Game Over?
             GameOver();
         }
 
-        private async void MoneyRelatedActions()
+        private async void MoneyRelatedActions(int XBET)
         {
             //HEADER TEXT
             //LEFT SECTION
             TxtBet.Text = $"BET= €{Bet}";
             //MIDDLE-SECTION
             int i = Money + (Bet * 2);
-            TxtBetWin.Text = $"WIN= €{i}";
-            TxtBetLose.Text = $"LOSE= €{Money}";
+            TxtBetWin.Text = $"WIN= €{Money + Bet}";
+            TxtBetLose.Text = $"LOSE= €{Money - Bet}";
             //RIGHT-SECTION
             TxtAmount.Text = $"€{Money}";
             TxtMoney.Text = $"MONEY= €{Money}";
@@ -835,16 +848,13 @@ namespace Blackjack
                 return;
             }
 
-            //APPLY BET
-            Money -= Bet;
-
             //Hide BetPanel Show PlayerDeck
             DisplayDeck(true);
 
             //Display Bet acceptance
             UpdateResultText($"€{Bet} has been bet!", "White");
 
-            MoneyRelatedActions();
+            MoneyRelatedActions(Bet);
         }
 
         private void BtnReset_Click(object sender, RoutedEventArgs e)
@@ -878,9 +888,9 @@ namespace Blackjack
             }
 
             //APPLY BET
-            Money -= Bet;
+            //Money -= Bet;
 
-            MoneyRelatedActions();
+            MoneyRelatedActions(Bet);
             BtnDeel_Click(sender, e);
         }
 
