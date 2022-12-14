@@ -26,7 +26,7 @@ namespace Blackjack
             InitializeComponent();
             Reset_Table();
             ResizeDeck();
-            MoneyRelatedActions(Bet);
+            MoneyRelatedActions();
         }
 
         //Lijsten
@@ -45,7 +45,6 @@ namespace Blackjack
         int PlayerValue;
         int CpuValue;
         string CardName;
-
 
 
         public Image Card(bool Player)
@@ -92,11 +91,7 @@ namespace Blackjack
 
         public int PullCard()
         {
-            //Reshuffle AllCards if all cards have been played
-            if (CardsInGame.Count == Deck.Count())
-            {
-                CardsInGame.Clear();
-            }
+            
 
             //Pull a random card that does not exist in the game yet
             int index = random.Next(0, 52);
@@ -190,9 +185,6 @@ namespace Blackjack
             TxtPlayerIcon.Text = "🤔";
             LblCpuScore.FontWeight = FontWeights.Regular;
             LblPlayerScore.FontWeight = FontWeights.Regular;
-
-            //Update Money
-            //Bet = 0;
         }
 
         private void Button_Enabling(bool Deel, bool Hit, bool Stand, bool Changebet, bool Continue, bool NewGame, bool AllIn)
@@ -296,8 +288,10 @@ namespace Blackjack
         
         private void UpdateResultText(string Text, string TextColor)
         {
+            //Display Text
             TxtResults.Text = Text;
 
+            //Change TextColor
             switch (TextColor)
             {
                 case "White":
@@ -356,7 +350,7 @@ namespace Blackjack
                 Reset_Table();
                 ResizeDeck();
                 UpdateDisplayScore();
-                MoneyRelatedActions(Bet);
+                MoneyRelatedActions();
 
                 //CPU DECK VISIBLE
                 CpuDeckPanel.Opacity = 1;
@@ -414,7 +408,7 @@ namespace Blackjack
                 Reset_Table();
                 ResizeDeck();
                 UpdateDisplayScore();
-                MoneyRelatedActions(Bet);
+                MoneyRelatedActions();
 
                 //Move BetPanel Up
                 BetMargin = -390;
@@ -495,10 +489,7 @@ namespace Blackjack
             CardName = Deck.ElementAt(index);
             //Add card to the game (Card List)
             CardsInGame.Add(Deck.ElementAt(index));
-            //Show how many cards are left in Deck
-            int CardsLeft = Deck.Count - CardsInGame.Count;
-            TxtDeckCount.Text = CardsLeft.ToString();
-
+            
             //Who pulled the card?
             if (Player)
             {
@@ -515,6 +506,24 @@ namespace Blackjack
 
             DeckValue();
             ResizeDeck();
+
+            //How many cards are left?
+            ShuffleDeck();
+        }
+
+        private void ShuffleDeck()
+        {
+            int CardsLeft = Deck.Count - CardsInGame.Count;
+
+            //Reshuffle AllCards if all cards have been played
+            if (CardsInGame.Count == Deck.Count())
+            {
+                UpdateResultText("Deck Got Shuffled:)", "White");
+                CardsInGame.Clear();
+            }
+
+            //Display
+            TxtDeckCount.Text = CardsLeft.ToString();
         }
 
         void FixOverFlow(object sender, RoutedEventArgs e, bool Player)
@@ -785,20 +794,28 @@ namespace Blackjack
             }
 
             //Update Header
-            MoneyRelatedActions(Bet);
+            MoneyRelatedActions();
             //Game Over?
             GameOver();
         }
 
-        private async void MoneyRelatedActions(int XBET)
+        private async void MoneyRelatedActions()
         {
             //HEADER TEXT
             //LEFT SECTION
             TxtBet.Text = $"BET= €{Bet}";
+
             //MIDDLE-SECTION
-            int i = Money + (Bet * 2);
             TxtBetWin.Text = $"WIN= €{Money + Bet}";
-            TxtBetLose.Text = $"LOSE= €{Money - Bet}";
+            if (Money - Bet <= 0)
+            {
+                TxtBetLose.Text = "LOSE= GAME OVER!";
+            }
+            else
+            {
+                TxtBetLose.Text = $"LOSE= €{Money - Bet}";
+            }
+
             //RIGHT-SECTION
             TxtAmount.Text = $"€{Money}";
             TxtMoney.Text = $"MONEY= €{Money}";
@@ -863,7 +880,7 @@ namespace Blackjack
             //Display Bet acceptance
             UpdateResultText($"€{Bet} has been bet!", "White");
 
-            MoneyRelatedActions(Bet);
+            MoneyRelatedActions();
         }
 
         private void BtnBetAllIn_Click(object sender, RoutedEventArgs e)
@@ -899,7 +916,7 @@ namespace Blackjack
             //APPLY BET
             //Money -= Bet;
 
-            MoneyRelatedActions(Bet);
+            MoneyRelatedActions();
             BtnDeel_Click(sender, e);
         }
 
@@ -909,6 +926,7 @@ namespace Blackjack
             TxtDeckCount.Text = (Deck.Count - CardsInGame.Count).ToString();
             Button_Enabling(false, false, false, false, false, false, false);
             Money = 100;
+            Bet = 0;
             DisplayDeck(false);
             await Task.Delay(500);
             Reset_Table();
@@ -917,7 +935,7 @@ namespace Blackjack
         private void BtnAllIn_Click(object sender, RoutedEventArgs e)
         {
             Bet = Money;
-            MoneyRelatedActions(Bet);
+            MoneyRelatedActions();
 
             BtnDeel_Click(sender, e);
         }
