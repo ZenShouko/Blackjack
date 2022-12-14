@@ -195,7 +195,7 @@ namespace Blackjack
             //Bet = 0;
         }
 
-        private void Button_Enabling(bool Deel, bool Hit, bool Stand, bool Changebet, bool Continue, bool NewGame)
+        private void Button_Enabling(bool Deel, bool Hit, bool Stand, bool Changebet, bool Continue, bool NewGame, bool AllIn)
         {
             if (Deel)
             {
@@ -249,6 +249,15 @@ namespace Blackjack
             else
             {
                 BtnNewGame.Visibility = Visibility.Collapsed;
+            }
+
+            if (AllIn)
+            {
+                BtnAllIn.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                BtnAllIn.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -368,7 +377,7 @@ namespace Blackjack
                 PlayerDeckPanelBorder.Visibility = Visibility.Visible;
 
                 //Show buttons
-                Button_Enabling(true, false, false, false, false, false);
+                Button_Enabling(true, false, false, false, false, false, false);
 
                 //Edit Result Text
                 await Task.Delay(2000);
@@ -422,7 +431,7 @@ namespace Blackjack
         private async void BtnDeel_Click(object sender, RoutedEventArgs e)
         {
             //Table preparation
-            Button_Enabling(false, false, false, false, false, false);
+            Button_Enabling(false, false, false, false, false, false, false);
             Reset_Table();
             LblPlayerScore.Content = "...";
             LblCpuScore.Content = "...";
@@ -456,7 +465,7 @@ namespace Blackjack
             }
 
             //Re-enable the needed buttons
-            Button_Enabling(false, true, true, false, false, false);
+            Button_Enabling(false, true, true, false, false, false, false);
         }
 
         private void BtnHit_Click(object sender, RoutedEventArgs e)
@@ -617,7 +626,7 @@ namespace Blackjack
         private async void Cpu_Turn(object sender, RoutedEventArgs e)
         {
             //Enabling da buttons
-            Button_Enabling(false, false, false, false, false, false);
+            Button_Enabling(false, false, false, false, false, false, false);
             //Update text
             UpdateResultText("CPU Turn.", "White");
 
@@ -742,7 +751,7 @@ namespace Blackjack
             }
 
             //Enabling da buttons
-            Button_Enabling(false, false, false, true, true, false);
+            Button_Enabling(false, false, false, true, true, false, true);
             //Hand out PAY
             BetHandling(Result);
         }
@@ -809,7 +818,7 @@ namespace Blackjack
         {
             if (Money > 0) return;
 
-            Button_Enabling(false, false, false, false, false, false);
+            Button_Enabling(false, false, false, false, false, false, false);
 
             await Task.Delay(1500);
             while (TxtResults.Opacity > 0)
@@ -827,7 +836,7 @@ namespace Blackjack
             }
 
             await Task.Delay(2000);
-            Button_Enabling(false, false, false, false, false, true);
+            Button_Enabling(false, false, false, false, false, true, false);
         }
 
         private void BtnBet_Click(object sender, RoutedEventArgs e)
@@ -857,10 +866,10 @@ namespace Blackjack
             MoneyRelatedActions(Bet);
         }
 
-        private void BtnReset_Click(object sender, RoutedEventArgs e)
+        private void BtnBetAllIn_Click(object sender, RoutedEventArgs e)
         {
-            SldAmount.Value = SldAmount.Minimum;
-            TxtBetAmount.Text = (Money / 10).ToString();
+            SldAmount.Value = SldAmount.Maximum;
+            TxtBetAmount.Text = SldAmount.Maximum.ToString();
         }
 
         private void SldAmount_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -874,7 +883,7 @@ namespace Blackjack
             Bet = 0;
 
             DisplayDeck(false);
-            Button_Enabling(false, false, false, false, false, false);
+            Button_Enabling(false, false, false, false, false, false, false);
         }
 
         private void BtnContinue_Click(object sender, RoutedEventArgs e)
@@ -898,11 +907,19 @@ namespace Blackjack
         {
             CardsInGame.Clear();
             TxtDeckCount.Text = (Deck.Count - CardsInGame.Count).ToString();
-            Button_Enabling(false, false, false, false, false, false);
+            Button_Enabling(false, false, false, false, false, false, false);
             Money = 100;
             DisplayDeck(false);
             await Task.Delay(500);
             Reset_Table();
+        }
+
+        private void BtnAllIn_Click(object sender, RoutedEventArgs e)
+        {
+            Bet = Money;
+            MoneyRelatedActions(Bet);
+
+            BtnDeel_Click(sender, e);
         }
     }
 }

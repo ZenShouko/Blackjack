@@ -172,12 +172,13 @@
         </StackPanel>
         
         <!--Buttons-->
-        <StackPanel Visibility="Visible" Orientation="Horizontal" Grid.Column="2" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+        <StackPanel Visibility="Visible" Orientation="Horizontal" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnDeel" Content="✨Start✨" Click="BtnDeel_Click"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnHit" Content="Hit" Click="BtnHit_Click"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnStand" Content="Stand" Click="BtnStand_Click"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnChangeBet" Content="Change Bet" Click="BtnChangeBet_Click" FontSize="18"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnContinue" Content="Continue" Click="BtnContinue_Click" FontSize="20"/>
+            <Button Style="{StaticResource DefaultButton}" x:Name="BtnAllIn" Content="All In" Click="BtnAllIn_Click" FontSize="20"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnNewGame" Content="New Game" Click="BtnNewGame_Click" FontSize="20"/>
         </StackPanel>
 
@@ -218,7 +219,7 @@
                     BorderThickness="1" BorderBrush="Lavender" IsSnapToTickEnabled="True" ValueChanged="SldAmount_ValueChanged"/>
             <StackPanel Orientation="Horizontal" Margin="15" HorizontalAlignment="Center">
                 <Button Style="{StaticResource BetButton}" x:Name="BtnBet" Content="Bet" Click="BtnBet_Click"/>
-                <Button Style="{StaticResource ResetButton}" x:Name="BtnReset" Content="Reset" Click="BtnReset_Click"/>
+                <Button Style="{StaticResource ResetButton}" x:Name="BtnBetAllIn" Content="ALL IN" Click="BtnBetAllIn_Click"/>
             </StackPanel>
         </StackPanel>
     </Grid>
