@@ -6,3 +6,5 @@
  - We might try to merge "int Playerhand" and "int[] PlayerHandValue"
  --> So we remove the int and only keep the list.
 	 The list already contains all the values of the cards that we posses. We can just use a sum to get the total value of a deck.
+	 ==> Replacing [PlayerHand] with [PlayerHandValue.Sum()];
+	 ISSUE SOLVED :)

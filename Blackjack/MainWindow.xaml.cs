@@ -42,8 +42,6 @@ namespace Blackjack
         //Andere Variabelen
         Random random = new Random();
         bool Soft17Clear = false;
-        int PlayerValue;
-        int CpuValue;
         string CardName;
 
 
@@ -170,8 +168,6 @@ namespace Blackjack
             //Cards Value
             PlayerHandValue.Clear();
             CpuHandValue.Clear();
-            PlayerValue = 0;
-            CpuValue = 0;
 
             //CardDisplay
             PlayerDeckPanel.Children.Clear();
@@ -262,8 +258,8 @@ namespace Blackjack
 
         private void UpdateDisplayScore()
         {
-            LblPlayerScore.Content = PlayerValue.ToString();
-            LblCpuScore.Content = CpuValue.ToString();
+            LblPlayerScore.Content = PlayerHandValue.Sum().ToString();
+            LblCpuScore.Content = CpuHandValue.Sum().ToString();
         }
 
         private void ResizeDeck()
@@ -459,14 +455,14 @@ namespace Blackjack
             ResizeDeck();
 
             //Did we get a 21?
-            if (PlayerValue == 21)
+            if (PlayerHandValue.Sum() == 21)
             {
                 Cpu_Turn(sender, e);
                 return;
             }
 
             //Re-enable the needed buttons
-            Button_Enabling("Hit Stand");
+            Button_Enabling("Hit Stand Split");
         }
 
         private void BtnHit_Click(object sender, RoutedEventArgs e)
@@ -474,7 +470,7 @@ namespace Blackjack
             AddCard(PullCard(), true);
             FixOverFlow(sender, e, true);
 
-            if (PlayerValue >= 21)
+            if (PlayerHandValue.Sum() >= 21)
             {
                 Cpu_Turn(sender, e);
             }
@@ -511,7 +507,6 @@ namespace Blackjack
                 CpuHandValue.Add(CardValue());
             }
 
-            DeckValue();
             ResizeDeck();
 
             //How many cards are left?
@@ -537,20 +532,18 @@ namespace Blackjack
         {
             if (Player)
             {
-                if (PlayerValue > 21)
+                if (PlayerHandValue.Sum() > 21)
                 {
                     TurnAceInto1(sender, e, Player);
                 }
             }
             else
             {
-                if (CpuValue > 21)
+                if (CpuHandValue.Sum() > 21)
                 {
                     TurnAceInto1(sender, e, Player);
                 }
             }
-
-            DeckValue();
         }
 
         public int CardValue()
@@ -601,23 +594,7 @@ namespace Blackjack
             }
         }
 
-        private void DeckValue()
-        {
-            //For the Player
-            PlayerValue = 0;
-            foreach (var value in PlayerHandValue)
-            {
-                PlayerValue += value;
-            }
-
-            //For Cpu
-            CpuValue = 0;
-            foreach (var value in CpuHandValue)
-            {
-                CpuValue += value;
-            }
-        }
-
+        
         private void TurnAceInto1(object sender, RoutedEventArgs e, bool Player)
         {
             if (Player)
@@ -636,7 +613,6 @@ namespace Blackjack
                     CpuHandValue.Add(1);
                 }
             }
-            DeckValue();
         }
 
         private async void Cpu_Turn(object sender, RoutedEventArgs e)
@@ -652,12 +628,10 @@ namespace Blackjack
             CpuDeckPanel.Children.RemoveAt(CpuDeckPanel.Children.Count - 1);
 
             //Keep pulling cards until we reach 17+
-            DeckValue();
-            while (CpuValue < 17)
+            while (CpuHandValue.Sum() < 17)
             {
                 AddCard(PullCard(), false);
-                DeckValue();
-                if (CpuValue < 22)
+                if (CpuHandValue.Sum() < 22)
                 {
                     UpdateDisplayScore();
                     await Task.Delay(500);
@@ -665,7 +639,7 @@ namespace Blackjack
             }
 
             //Does CPU have a blackjack?
-            if (CpuValue == 21)
+            if (CpuHandValue.Sum() == 21)
             {
                 Match_Results();
                 return;
@@ -675,16 +649,14 @@ namespace Blackjack
             if (!Soft17Clear) //only clear if we haven't already
             {
                 CheckSoft17(sender, e);
-                DeckValue();
                 UpdateDisplayScore();
             }
 
             UpdateDisplayScore();
             //Keep pulling cards until we reach 17+
-            while (CpuValue < 17)
+            while (CpuHandValue.Sum() < 17)
             {
                 AddCard(PullCard(), false);
-                DeckValue();
                 UpdateDisplayScore();
                 await Task.Delay(500);
             }
@@ -712,31 +684,31 @@ namespace Blackjack
             string Result;
 
             //Calculate Result
-            if (CpuValue == 21 && PlayerValue != 21)
+            if (CpuHandValue.Sum() == 21 && PlayerHandValue.Sum() != 21)
             {
                 Result = "Cpu";
             }
-            else if (CpuValue == 21 && PlayerValue == 21)
+            else if (CpuHandValue.Sum() == 21 && PlayerHandValue.Sum() == 21)
             {
                 Result = "Draw";
             }
-            else if (CpuValue > 21 && PlayerValue > 21)
+            else if (CpuHandValue.Sum() > 21 && PlayerHandValue.Sum() > 21)
             {
                 Result = "Draw";
             }
-            else if (CpuValue == PlayerValue)
+            else if (CpuHandValue.Sum() == PlayerHandValue.Sum())
             {
                 Result = "Draw";
             }
-            else if (CpuValue > 21)
+            else if (CpuHandValue.Sum() > 21)
             {
                 Result = "Player";
             }
-            else if (CpuValue > PlayerValue)
+            else if (CpuHandValue.Sum() > PlayerHandValue.Sum())
             {
                 Result = "Cpu";
             }
-            else if (PlayerValue > 21)
+            else if (PlayerHandValue.Sum() > 21)
             {
                 Result = "Cpu";
             }
@@ -777,7 +749,7 @@ namespace Blackjack
             if (Result == "Player")
             {
                 //BLACKJACK?
-                if (PlayerDeck.Count == 2 && PlayerValue == 21)
+                if (PlayerDeck.Count == 2 && PlayerHandValue.Sum() == 21)
                 {
                     float i = Bet * 2.5f;
                     Math.Round(i);
