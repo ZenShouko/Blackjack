@@ -107,7 +107,7 @@
         </Style>
     </Window.Resources>
     
-    <Grid Height="625" Width="800" Loaded="CreerDeck">
+    <Grid Height="625" Width="800">
             <!--GRID Properties-->
         <Grid.Background>
             <ImageBrush ImageSource="/PNG/Casino_Texture.jpg" Stretch="None" TileMode="Tile" Viewport="0, 0, 100, 100" ViewportUnits="Absolute"/>

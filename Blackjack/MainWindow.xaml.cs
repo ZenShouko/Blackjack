@@ -30,7 +30,21 @@ namespace Blackjack
         }
 
         //Lijsten
-        List<string> Deck = new List<string>(); //ALL 52 CARDS IN THE GAME
+        List<string> Deck = new List<string>() 
+        {   "Clubs-Ace",     "Diamonds-Ace",     "Hearts-Ace",   "Spades-Ace",   //3
+            "Clubs-Two",     "Diamonds-Two",     "Hearts-Two",   "Spades-Two",   //7
+            "Clubs-Three",   "Diamonds-Three",   "Hearts-Three", "Spades-Three", //11
+            "Clubs-Four",    "Diamonds-Four",    "Hearts-Four",  "Spades-Four",  //15
+            "Clubs-Five",    "Diamonds-Five",    "Hearts-Five",  "Spades-Five",  //19
+            "Clubs-Six",     "Diamonds-Six",     "Hearts-Six",   "Spades-Six",   //23
+            "Clubs-Seven",   "Diamonds-Seven",   "Hearts-Seven", "Spades-Seven", //27
+            "Clubs-Eight",   "Diamonds-Eight",   "Hearts-Eight", "Spades-Eight", //31
+            "Clubs-Nine",    "Diamonds-Nine",    "Hearts-Nine",  "Spades-Nine",  //35
+            "Clubs-Ten",     "Diamonds-Ten",     "Hearts-Ten",   "Spades-Ten",   //39
+            "Clubs-Jack",    "Diamonds-Jack",    "Hearts-Jack",  "Spades-Jack",  //43
+            "Clubs-Queen",   "Diamonds-Queen",   "Hearts-Queen", "Spades-Queen", //47
+            "Clubs-King",    "Diamonds-King",    "Hearts-King",  "Spades-King"   //51
+        };
         List<string> CardsInGame = new List<string>(); //ALL CARDS IN USE (player and cpu combined)
         List<string> PlayerDeck = new List<string>(); //All CARDS PLAYER
         List<string> CpuDeck = new List<string>(); //ALL CARDS CPU
@@ -98,63 +112,6 @@ namespace Blackjack
             }
 
             return index;
-        }
-
-        private void CreerDeck(object sender, RoutedEventArgs e)
-        {
-            //Voeg alle 52 kaarten in Deck
-            Deck.Add("Clubs-Ace");
-            Deck.Add("Diamonds-Ace");
-            Deck.Add("Hearts-Ace");
-            Deck.Add("Spades-Ace"); //3
-            Deck.Add("Clubs-Two");
-            Deck.Add("Diamonds-Two");
-            Deck.Add("Hearts-Two");
-            Deck.Add("Spades-Two"); //7
-            Deck.Add("Clubs-Three");
-            Deck.Add("Diamonds-Three");
-            Deck.Add("Hearts-Three");
-            Deck.Add("Spades-Three"); //11
-            Deck.Add("Clubs-Four");
-            Deck.Add("Diamonds-Four");
-            Deck.Add("Hearts-Four");
-            Deck.Add("Spades-Four"); //15
-            Deck.Add("Clubs-Five");
-            Deck.Add("Diamonds-Five");
-            Deck.Add("Hearts-Five");
-            Deck.Add("Spades-Five"); //19
-            Deck.Add("Clubs-Six");
-            Deck.Add("Diamonds-Six");
-            Deck.Add("Hearts-Six");
-            Deck.Add("Spades-Six"); //23
-            Deck.Add("Clubs-Seven");
-            Deck.Add("Diamonds-Seven");
-            Deck.Add("Hearts-Seven");
-            Deck.Add("Spades-Seven"); //27
-            Deck.Add("Clubs-Eight");
-            Deck.Add("Diamonds-Eight");
-            Deck.Add("Hearts-Eight");
-            Deck.Add("Spades-Eight"); //31
-            Deck.Add("Clubs-Nine");
-            Deck.Add("Diamonds-Nine");
-            Deck.Add("Hearts-Nine");
-            Deck.Add("Spades-Nine"); //35
-            Deck.Add("Clubs-Ten");
-            Deck.Add("Diamonds-Ten");
-            Deck.Add("Hearts-Ten");
-            Deck.Add("Spades-Ten"); //39
-            Deck.Add("Clubs-Jack");
-            Deck.Add("Diamonds-Jack");
-            Deck.Add("Hearts-Jack");
-            Deck.Add("Spades-Jack"); //43
-            Deck.Add("Clubs-Queen");
-            Deck.Add("Diamonds-Queen");
-            Deck.Add("Hearts-Queen");
-            Deck.Add("Spades-Queen"); //47
-            Deck.Add("Clubs-King");
-            Deck.Add("Diamonds-King");
-            Deck.Add("Hearts-King");
-            Deck.Add("Spades-King"); //51
         }
 
         private void Reset_Table()
