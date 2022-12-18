@@ -116,21 +116,17 @@ namespace Blackjack
 
         private void Reset_Table()
         {
-            //Maak lijst leeg
-            //Cards
-            //CardsInGame.Clear();
+            //Reset Deck and values
             PlayerDeck.Clear();
             CpuDeck.Clear();
-
-            //Cards Value
             PlayerHandValue.Clear();
             CpuHandValue.Clear();
 
-            //CardDisplay
+            //Cards on screen
             PlayerDeckPanel.Children.Clear();
             CpuDeckPanel.Children.Clear();
 
-            //Reseting values
+            //other values
             Soft17Clear = false;
             TxtResults.Foreground = Brushes.White;
             TxtPlayerIcon.Text = "🤔";
@@ -294,6 +290,12 @@ namespace Blackjack
             double DeckPanelOpacity = CpuDeckPanel.Opacity;
             double PanelBorderOpacity = CpuDeckPanelBorder.Opacity;
 
+            //Prepare Table for next game
+            Reset_Table();
+            ResizeDeck();
+            UpdateDisplayScore();
+            MoneyRelatedActions();
+
             if (ShowPlayerDeck)
             {
                 //Move BetPanel Down
@@ -305,12 +307,6 @@ namespace Blackjack
                     BetPanelBorder.Margin = new Thickness(0, 0, 0, BetMargin);
                     await Task.Delay(25);
                 }
-
-                //Prepare Table for next game
-                Reset_Table();
-                ResizeDeck();
-                UpdateDisplayScore();
-                MoneyRelatedActions();
 
                 //CPU DECK VISIBLE
                 CpuDeckPanel.Opacity = 1;
@@ -363,12 +359,6 @@ namespace Blackjack
 
                 //Edit Result text
                 UpdateResultText("Place your bet!", "White");
-
-                //Prepare Table for next game
-                Reset_Table();
-                ResizeDeck();
-                UpdateDisplayScore();
-                MoneyRelatedActions();
 
                 //Move BetPanel Up
                 BetMargin = -390;
@@ -596,7 +586,7 @@ namespace Blackjack
             }
 
             //Does CPU have a blackjack?
-            if (CpuHandValue.Sum() == 21)
+            if (CpuHandValue.Sum() == 21 && CpuDeckPanel.Children.Count == 2)
             {
                 Match_Results();
                 return;
@@ -848,9 +838,6 @@ namespace Blackjack
                 BtnContinue.Visibility = Visibility.Hidden;
                 return;
             }
-
-            //APPLY BET
-            //Money -= Bet;
 
             MoneyRelatedActions();
             BtnDeel_Click(sender, e);
