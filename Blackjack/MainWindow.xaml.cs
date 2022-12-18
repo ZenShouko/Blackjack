@@ -91,8 +91,6 @@ namespace Blackjack
 
         public int PullCard()
         {
-            
-
             //Pull a random card that does not exist in the game yet
             int index = random.Next(0, 52);
 
@@ -187,9 +185,9 @@ namespace Blackjack
             LblPlayerScore.FontWeight = FontWeights.Regular;
         }
 
-        private void Button_Enabling(bool Deel, bool Hit, bool Stand, bool Changebet, bool Continue, bool NewGame, bool AllIn)
+        private void Button_Enabling(string ButtonNames)
         {
-            if (Deel)
+            if (ButtonNames.Contains("Deel"))
             {
                 BtnDeel.Visibility = Visibility.Visible;
             }
@@ -198,7 +196,7 @@ namespace Blackjack
                 BtnDeel.Visibility = Visibility.Collapsed;
             }
 
-            if (Hit)
+            if (ButtonNames.Contains("Hit"))
             {
                 BtnHit.Visibility = Visibility.Visible;
             }
@@ -207,7 +205,7 @@ namespace Blackjack
                 BtnHit.Visibility = Visibility.Collapsed;
             }
 
-            if (Stand)
+            if (ButtonNames.Contains("Stand"))
             {
                 BtnStand.Visibility = Visibility.Visible;
             }
@@ -216,7 +214,7 @@ namespace Blackjack
                 BtnStand.Visibility = Visibility.Collapsed;
             }
 
-            if (Changebet)
+            if (ButtonNames.Contains("ChangeBet"))
             {
                 BtnChangeBet.Visibility = Visibility.Visible;
             }
@@ -225,7 +223,7 @@ namespace Blackjack
                 BtnChangeBet.Visibility = Visibility.Collapsed;
             }
 
-            if (Continue)
+            if (ButtonNames.Contains("Continue"))
             {
                 BtnContinue.Visibility = Visibility.Visible;
             }
@@ -234,7 +232,7 @@ namespace Blackjack
                 BtnContinue.Visibility = Visibility.Collapsed;
             }
 
-            if (NewGame)
+            if (ButtonNames.Contains("NewGame"))
             {
                 BtnNewGame.Visibility = Visibility.Visible;
             }
@@ -243,13 +241,22 @@ namespace Blackjack
                 BtnNewGame.Visibility = Visibility.Collapsed;
             }
 
-            if (AllIn)
+            if (ButtonNames.Contains("AllIn"))
             {
                 BtnAllIn.Visibility = Visibility.Visible;
             }
             else
             {
                 BtnAllIn.Visibility = Visibility.Collapsed;
+            }
+
+            if (ButtonNames.Contains("Split"))
+            {
+                BtnSplit.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                BtnSplit.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -371,7 +378,7 @@ namespace Blackjack
                 PlayerDeckPanelBorder.Visibility = Visibility.Visible;
 
                 //Show buttons
-                Button_Enabling(true, false, false, false, false, false, false);
+                Button_Enabling("Deel");
 
                 //Edit Result Text
                 await Task.Delay(2000);
@@ -425,7 +432,7 @@ namespace Blackjack
         private async void BtnDeel_Click(object sender, RoutedEventArgs e)
         {
             //Table preparation
-            Button_Enabling(false, false, false, false, false, false, false);
+            Button_Enabling("");
             Reset_Table();
             LblPlayerScore.Content = "...";
             LblCpuScore.Content = "...";
@@ -459,7 +466,7 @@ namespace Blackjack
             }
 
             //Re-enable the needed buttons
-            Button_Enabling(false, true, true, false, false, false, false);
+            Button_Enabling("Hit Stand");
         }
 
         private void BtnHit_Click(object sender, RoutedEventArgs e)
@@ -634,8 +641,8 @@ namespace Blackjack
 
         private async void Cpu_Turn(object sender, RoutedEventArgs e)
         {
-            //Enabling da buttons
-            Button_Enabling(false, false, false, false, false, false, false);
+            //Disabling da buttons
+            Button_Enabling("");
             //Update text
             UpdateResultText("CPU Turn.", "White");
 
@@ -760,7 +767,7 @@ namespace Blackjack
             }
 
             //Enabling da buttons
-            Button_Enabling(false, false, false, true, true, false, true);
+            Button_Enabling("ChangeBet Continue AllIn");
             //Hand out PAY
             BetHandling(Result);
         }
@@ -835,7 +842,7 @@ namespace Blackjack
         {
             if (Money > 0) return;
 
-            Button_Enabling(false, false, false, false, false, false, false);
+            Button_Enabling("");
 
             await Task.Delay(1500);
             while (TxtResults.Opacity > 0)
@@ -853,7 +860,7 @@ namespace Blackjack
             }
 
             await Task.Delay(2000);
-            Button_Enabling(false, false, false, false, false, true, false);
+            Button_Enabling("NewGame");
         }
 
         private void BtnBet_Click(object sender, RoutedEventArgs e)
@@ -900,7 +907,7 @@ namespace Blackjack
             Bet = 0;
 
             DisplayDeck(false);
-            Button_Enabling(false, false, false, false, false, false, false);
+            Button_Enabling("");
         }
 
         private void BtnContinue_Click(object sender, RoutedEventArgs e)
@@ -924,7 +931,7 @@ namespace Blackjack
         {
             CardsInGame.Clear();
             TxtDeckCount.Text = (Deck.Count - CardsInGame.Count).ToString();
-            Button_Enabling(false, false, false, false, false, false, false);
+            Button_Enabling("");
             Money = 100;
             Bet = 0;
             DisplayDeck(false);
@@ -938,6 +945,11 @@ namespace Blackjack
             MoneyRelatedActions();
 
             BtnDeel_Click(sender, e);
+        }
+
+        private void BtnSplit_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

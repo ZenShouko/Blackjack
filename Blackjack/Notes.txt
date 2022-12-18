@@ -1,5 +1,5 @@
-﻿We are on the NewDesign Branch.
-
+﻿We are working on the New features.
+[Betpanel has been collapsed]
  BUGS:
   
  NOTES:
