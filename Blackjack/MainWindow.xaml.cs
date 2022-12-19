@@ -47,19 +47,22 @@ namespace Blackjack
         };
         List<string> CardsInGame = new List<string>(); //ALL CARDS IN USE (player and cpu combined)
         List<string> PlayerDeck = new List<string>(); //All CARDS PLAYER
+        List<string> PlayerDeck2 = new List<string>(); //Second deck for player (split)
         List<string> CpuDeck = new List<string>(); //ALL CARDS CPU
         List<int> PlayerHandValue = new List<int>(); //ALL CARD VALUES FROM PLAYER
+        List<int> PlayerHandValue2 = new List<int>(); //Card values for second deck (player)
         List<int> CpuHandValue = new List<int>(); //ALL CARD VALUES FROM CPU
         //BETTING
         int Money = 100;
         int Bet = 0;
+        int ActiveDeck = 1; //Welke Deck word nu gebruikt? (speler)
         //Andere Variabelen
         Random random = new Random();
         bool Soft17Clear = false;
         string CardName;
 
 
-        public Image Card(bool Player)
+        public Image Card(bool Player, int Deck)
         {
             int LeftMargin = 0; //Used as the margin
             int Height = 150;
@@ -68,7 +71,11 @@ namespace Blackjack
             //Match margin so they stack on top of each other. [1st card margin 0, all others -85]
             if (Player)
             {
-                if (PlayerDeckPanel.Children.Count != 0)
+                if (PlayerDeckPanel.Children.Count != 0 && Deck == 1)
+                {
+                    LeftMargin = -85;
+                }
+                else if (PlayerDeckPanel2.Children.Count != 0 && Deck == 2)
                 {
                     LeftMargin = -85;
                 }
@@ -211,18 +218,31 @@ namespace Blackjack
 
         private void UpdateDisplayScore()
         {
-            LblPlayerScore.Content = PlayerHandValue.Sum().ToString();
+            if (ActiveDeck == 1)
+            {
+                LblPlayerScore.Content = PlayerHandValue.Sum().ToString();
+            }
+            else
+            {
+                LblPlayerScore.Content = PlayerHandValue2.Sum().ToString();
+            }
+
             LblCpuScore.Content = CpuHandValue.Sum().ToString();
         }
 
         private void ResizeDeck()
         {
             int PlayerSize = 0;
+            int PlayerSize2 = 0;
             int CpuSize = 0;
 
             if (PlayerDeckPanel.Children.Count > 0)
             {
                 PlayerSize = 110;
+            }
+            if (PlayerDeckPanel2.Children.Count > 0)
+            {
+                PlayerSize2 = 110;
             }
             if (CpuDeckPanel.Children.Count > 0)
             {
@@ -233,12 +253,17 @@ namespace Blackjack
             {
                 PlayerSize += 20;
             }
+            foreach (var item in PlayerDeckPanel2.Children)
+            {
+                PlayerSize2 += 20;
+            }
             foreach (var item in CpuDeckPanel.Children)
             {
                 CpuSize += 20;
             }
 
             PlayerDeckPanelBorder.Width = PlayerSize;
+            PlayerDeckPanelBorder2.Width = PlayerSize2;
             CpuDeckPanelBorder.Width = CpuSize;
         }
         
@@ -384,7 +409,7 @@ namespace Blackjack
             //Verdeel 2 kaarten
             for (int i = 0; i < 2; i++)
             {
-                AddCard(PullCard(), true);
+                AddCard(PullCard(), true, 1);
                 UpdateDisplayScore();
                 await Task.Delay(500);
             }
@@ -393,12 +418,12 @@ namespace Blackjack
             FixOverFlow(sender, e, true);
 
             //GiveCpuCard
-            AddCard(PullCard(), false);
+            AddCard(PullCard(), false, 0);
             UpdateDisplayScore();
             await Task.Delay(500);
             //Secret Card
             CardName = "Card-Back";
-            CpuDeckPanel.Children.Add(Card(false));
+            CpuDeckPanel.Children.Add(Card(false, 0));
             ResizeDeck();
 
             //Did we get a 21?
@@ -409,15 +434,29 @@ namespace Blackjack
             }
 
             //Re-enable the needed buttons
-            Button_Enabling("Hit Stand Split");
+            Button_Enabling("Hit Stand Split Deel");
         }
 
         private void BtnHit_Click(object sender, RoutedEventArgs e)
         {
-            AddCard(PullCard(), true);
+            AddCard(PullCard(), true, ActiveDeck);
             FixOverFlow(sender, e, true);
 
+            //Switch to second deck
             if (PlayerHandValue.Sum() >= 21)
+            {
+                if (PlayerDeck2.Count() == 0) 
+                { 
+                    Cpu_Turn(sender, e); 
+                }
+                else
+                {
+                    ActiveDeck = 2;
+                }
+            }
+
+            //End 2nd deck's turn if value exceeds 21
+            if (PlayerHandValue2.Sum() >= 21)
             {
                 Cpu_Turn(sender, e);
             }
@@ -428,28 +467,55 @@ namespace Blackjack
 
         private void BtnStand_Click(object sender, RoutedEventArgs e)
         {
+            if (ActiveDeck == 2)
+            {
+                Cpu_Turn(sender, e);
+            }
+
             //Start CPU's turn
-            Cpu_Turn(sender, e);
+            if (PlayerHandValue2.Sum() == 0 && ActiveDeck == 1)
+            {
+                Cpu_Turn(sender, e);
+            }
+            else
+            {
+                ActiveDeck = 2;
+                UpdateDisplayScore();
+            }
+
+            
         }
 
 
-        private void AddCard(int index, bool Player)
+        private void AddCard(int index, bool Player, int WhichDeck)
         {
             //Set CardName to pulled card
             CardName = Deck.ElementAt(index);
-            //Add card to the game (Card List)
-            CardsInGame.Add(Deck.ElementAt(index));
+            //Add card to the game (Card List) IF IT'S A NEW CARD
+            if (!CardsInGame.Contains(Deck.ElementAt(index)))
+            {
+                CardsInGame.Add(Deck.ElementAt(index));
+            }
             
             //Who pulled the card?
             if (Player)
             {
-                PlayerDeckPanel.Children.Add(Card(Player));
-                PlayerDeck.Add(Deck.ElementAt(index));
-                PlayerHandValue.Add(CardValue());
+                if (WhichDeck == 1)
+                {
+                    PlayerDeckPanel.Children.Add(Card(Player, 1));
+                    PlayerDeck.Add(Deck.ElementAt(index));
+                    PlayerHandValue.Add(CardValue());
+                }
+                else
+                {
+                    PlayerDeckPanel2.Children.Add(Card(Player, 2));
+                    PlayerDeck2.Add(Deck.ElementAt(index));
+                    PlayerHandValue2.Add(CardValue());
+                }
             }
             else
             {
-                CpuDeckPanel.Children.Add(Card(Player));
+                CpuDeckPanel.Children.Add(Card(Player, 0));
                 CpuDeck.Add(Deck.ElementAt(index));
                 CpuHandValue.Add(CardValue());
             }
@@ -479,7 +545,11 @@ namespace Blackjack
         {
             if (Player)
             {
-                if (PlayerHandValue.Sum() > 21)
+                if (PlayerHandValue.Sum() > 21 && ActiveDeck == 1)
+                {
+                    TurnAceInto1(sender, e, Player);
+                }
+                else if (PlayerHandValue2.Sum() > 21 && ActiveDeck == 2)
                 {
                     TurnAceInto1(sender, e, Player);
                 }
@@ -546,10 +616,15 @@ namespace Blackjack
         {
             if (Player)
             {
-                if (PlayerHandValue.Contains(11)) //can we switch 11 with 1?
+                if (PlayerHandValue.Contains(11) && ActiveDeck == 1) //can we switch 11 with 1?
                 {
                     PlayerHandValue.Remove(11);
                     PlayerHandValue.Add(1);
+                }
+                else if (PlayerHandValue2.Contains(11) && ActiveDeck == 2) //is the second deck active?
+                {
+                    PlayerHandValue2.Remove(11);
+                    PlayerHandValue2.Add(1);
                 }
             }
             else //For CPU
@@ -577,7 +652,7 @@ namespace Blackjack
             //Keep pulling cards until we reach 17+
             while (CpuHandValue.Sum() < 17)
             {
-                AddCard(PullCard(), false);
+                AddCard(PullCard(), false, 0);
                 if (CpuHandValue.Sum() < 22)
                 {
                     UpdateDisplayScore();
@@ -603,7 +678,7 @@ namespace Blackjack
             //Keep pulling cards until we reach 17+
             while (CpuHandValue.Sum() < 17)
             {
-                AddCard(PullCard(), false);
+                AddCard(PullCard(), false, 0);
                 UpdateDisplayScore();
                 await Task.Delay(500);
             }
@@ -865,7 +940,43 @@ namespace Blackjack
 
         private void BtnSplit_Click(object sender, RoutedEventArgs e)
         {
+            //Verplaatste eerste deck naar -1 column
+            PlayerDeckPanelBorder.SetValue(Grid.ColumnSpanProperty, 1);
+            PlayerDeckPanel.SetValue(Grid.ColumnSpanProperty, 1);
+            //Toon 2e deck
+            PlayerDeckPanelBorder2.Visibility = Visibility.Visible;
+            PlayerDeckPanel2.Visibility = Visibility.Visible;
 
+            //Plaats laatst getrokken kaart in de 2e deck lijst
+            PlayerDeckPanel.Children.RemoveAt(PlayerDeckPanel.Children.Count - 1);
+            PlayerHandValue.RemoveAt(1);
+
+            //Voeg kaart toe aan de 2e Panel
+            int index = Deck.FindIndex(a => a.Contains(PlayerDeck.ElementAt(1)));
+            AddCard(index, true, 2);
+
+            //Verwijder 2e kaart van de eerste lijst
+            PlayerDeck.RemoveAt(1);
+
+            //Geef aan elke deck 1 kaart
+            AddCard(PullCard(), true, 1);
+            FixOverFlow(sender, e, true);
+            ActiveDeck = 2;
+            AddCard(PullCard(), true, 2);
+            FixOverFlow(sender, e, true);
+
+            //Did Deck 1 get a blackjack?
+            if (PlayerHandValue.Sum() != 21)
+            {
+                ActiveDeck = 1;
+            }
+
+            //Buttons
+            Button_Enabling("Hit Stand");
+
+            //Update Display Score
+            ActiveDeck = 1;
+            UpdateDisplayScore();
         }
     }
 }

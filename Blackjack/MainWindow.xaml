@@ -196,10 +196,14 @@
             <!--Player Side-->
         <Border Visibility="Visible" x:Name="PlayerTable" Opacity="0.3" Background="Black" BorderBrush="Lavender" BorderThickness="5" 
                 CornerRadius="20" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" Margin="0, 0, 0, 0"/>
-        <!--PlayerDeck-->
+        <!--PlayerDeck1-->
         <Border Visibility="Visible" x:Name="PlayerDeckPanelBorder" CornerRadius="10, 10, 20, 16" BorderBrush="DarkSlateGray" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.6" 
                 Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" Margin="0, 5" Width="170" Height="175"/>
         <DockPanel Visibility="Visible" x:Name="PlayerDeckPanel" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <!--PlayerDeck2-->
+        <Border Visibility="Visible" x:Name="PlayerDeckPanelBorder2" CornerRadius="10, 10, 20, 16" BorderBrush="SlateGray" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.6" 
+                Grid.Column="3" Grid.Row="4" Margin="0, 5" Width="170" Height="175"/>
+        <DockPanel Visibility="Visible" x:Name="PlayerDeckPanel2" Grid.Column="3" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <!--PlayerScore-->
         <Grid Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115"/>
