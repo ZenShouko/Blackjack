@@ -125,12 +125,15 @@ namespace Blackjack
         {
             //Reset Deck and values
             PlayerDeck.Clear();
+            PlayerDeck2.Clear();
             CpuDeck.Clear();
             PlayerHandValue.Clear();
+            PlayerHandValue2.Clear();
             CpuHandValue.Clear();
 
             //Cards on screen
             PlayerDeckPanel.Children.Clear();
+            PlayerDeckPanel2.Children.Clear();
             CpuDeckPanel.Children.Clear();
 
             //other values
@@ -139,6 +142,11 @@ namespace Blackjack
             TxtPlayerIcon.Text = "🤔";
             LblCpuScore.FontWeight = FontWeights.Regular;
             LblPlayerScore.FontWeight = FontWeights.Regular;
+
+            //Undo Split settings
+            ActiveDeck = 1;
+            HighlightActiveDeck();
+            RepositionDeckPanel(false);
         }
 
         private void Button_Enabling(string ButtonNames)
@@ -458,21 +466,27 @@ namespace Blackjack
             //End 2nd deck's turn if value exceeds 21
             if (PlayerHandValue2.Sum() >= 21)
             {
+                ActiveDeck = 1;
                 Cpu_Turn(sender, e);
             }
 
             //Display
             UpdateDisplayScore();
+            HighlightActiveDeck();
         }
 
         private void BtnStand_Click(object sender, RoutedEventArgs e)
         {
-            if (ActiveDeck == 2)
+            if (ActiveDeck == 2) //If on 2nd deck, start CPU TURN
             {
+                ActiveDeck = 1;
+                UpdateDisplayScore();
+                HighlightActiveDeck();
                 Cpu_Turn(sender, e);
+                return;
             }
 
-            //Start CPU's turn
+            //Check wether we have an active second deck
             if (PlayerHandValue2.Sum() == 0 && ActiveDeck == 1)
             {
                 Cpu_Turn(sender, e);
@@ -480,10 +494,9 @@ namespace Blackjack
             else
             {
                 ActiveDeck = 2;
+                HighlightActiveDeck();
                 UpdateDisplayScore();
             }
-
-            
         }
 
 
@@ -701,7 +714,7 @@ namespace Blackjack
             }
         }
 
-        private void Match_Results()
+        private async void Match_Results()
         {
             string Result;
 
@@ -760,10 +773,84 @@ namespace Blackjack
                 LblCpuScore.FontWeight = FontWeights.Bold;
             }
 
-            //Enabling da buttons
-            Button_Enabling("ChangeBet Continue AllIn");
             //Hand out PAY
             BetHandling(Result);
+            //Enabling da buttons
+            Button_Enabling("ChangeBet Continue AllIn");
+
+            //Check Second Deck ONLY IF NEEDED
+            if (PlayerDeck2.Count == 0)
+            {
+                return;
+            }
+            //Disable buttons
+            Button_Enabling("");
+            await Task.Delay(3000); //Wait 3 seconds
+
+            ActiveDeck = 2;
+            UpdateDisplayScore();
+            HighlightActiveDeck();
+
+            //Execute same steps as above but this time for second deck
+            //Calculate Result
+            if (CpuHandValue.Sum() == 21 && PlayerHandValue2.Sum() != 21)
+            {
+                Result = "Cpu";
+            }
+            else if (CpuHandValue.Sum() == 21 && PlayerHandValue2.Sum() == 21)
+            {
+                Result = "Draw";
+            }
+            else if (CpuHandValue.Sum() > 21 && PlayerHandValue2.Sum() > 21)
+            {
+                Result = "Draw";
+            }
+            else if (CpuHandValue.Sum() == PlayerHandValue2.Sum())
+            {
+                Result = "Draw";
+            }
+            else if (CpuHandValue.Sum() > 21)
+            {
+                Result = "Player";
+            }
+            else if (CpuHandValue.Sum() > PlayerHandValue2.Sum())
+            {
+                Result = "Cpu";
+            }
+            else if (PlayerHandValue2.Sum() > 21)
+            {
+                Result = "Cpu";
+            }
+            else
+            {
+                Result = "Player";
+            }
+
+            //Display Result
+            if (Result == "Player")
+            {
+                UpdateResultText("Won", "Green");
+                TxtPlayerIcon.Text = "😎";
+                LblPlayerScore.FontWeight = FontWeights.Bold;
+            }
+            else if (Result == "Cpu")
+            {
+                UpdateResultText("Lost", "Red");
+                TxtPlayerIcon.Text = "😢";
+                LblCpuScore.FontWeight = FontWeights.Bold;
+            }
+            else
+            {
+                UpdateResultText("Draw", "Orange");
+                TxtPlayerIcon.Text = "😅";
+                LblPlayerScore.FontWeight = FontWeights.Bold;
+                LblCpuScore.FontWeight = FontWeights.Bold;
+            }
+
+            //Hand out PAY
+            BetHandling(Result);
+            //Enabling da buttons
+            Button_Enabling("ChangeBet Continue AllIn");
         }
 
         private void BetHandling(string Result)
@@ -938,14 +1025,9 @@ namespace Blackjack
             BtnDeel_Click(sender, e);
         }
 
-        private void BtnSplit_Click(object sender, RoutedEventArgs e)
+        private async void BtnSplit_Click(object sender, RoutedEventArgs e)
         {
-            //Verplaatste eerste deck naar -1 column
-            PlayerDeckPanelBorder.SetValue(Grid.ColumnSpanProperty, 1);
-            PlayerDeckPanel.SetValue(Grid.ColumnSpanProperty, 1);
-            //Toon 2e deck
-            PlayerDeckPanelBorder2.Visibility = Visibility.Visible;
-            PlayerDeckPanel2.Visibility = Visibility.Visible;
+            RepositionDeckPanel(true);
 
             //Plaats laatst getrokken kaart in de 2e deck lijst
             PlayerDeckPanel.Children.RemoveAt(PlayerDeckPanel.Children.Count - 1);
@@ -959,23 +1041,136 @@ namespace Blackjack
             PlayerDeck.RemoveAt(1);
 
             //Geef aan elke deck 1 kaart
+            UpdateDisplayScore();
+            await Task.Delay(750);
             AddCard(PullCard(), true, 1);
             FixOverFlow(sender, e, true);
+            UpdateDisplayScore();
+
+            await Task.Delay(850);
             ActiveDeck = 2;
+            HighlightActiveDeck();
             AddCard(PullCard(), true, 2);
             FixOverFlow(sender, e, true);
+            UpdateDisplayScore();
+
+            await Task.Delay(800);
 
             //Did Deck 1 get a blackjack?
             if (PlayerHandValue.Sum() != 21)
             {
                 ActiveDeck = 1;
+                HighlightActiveDeck();
             }
+            else
+            {
+                ActiveDeck = 2;
+            }
+
 
             //Buttons
             Button_Enabling("Hit Stand");
 
             //Update Display Score
-            ActiveDeck = 1;
+            UpdateDisplayScore();
+        }
+
+        private void HighlightActiveDeck()
+        {
+            if (ActiveDeck == 1)
+            {
+                PlayerDeckPanel.Opacity = 1;
+                PlayerDeckPanelBorder.Opacity = 1;
+                PlayerDeckPanel2.Opacity = 0.4;
+                PlayerDeckPanelBorder2.Opacity = 0.3;
+            }
+            else
+            {
+                PlayerDeckPanel.Opacity = 0.4;
+                PlayerDeckPanelBorder.Opacity = 0.3;
+                PlayerDeckPanel2.Opacity = 1;
+                PlayerDeckPanelBorder2.Opacity = 1;
+            }
+        }
+
+        private void RepositionDeckPanel(bool Split)
+        {
+            if (Split)
+            {
+                //Verplaatste eerste deck naar -1 column
+                PlayerDeckPanelBorder.SetValue(Grid.ColumnProperty, 1);
+                PlayerDeckPanel.SetValue(Grid.ColumnProperty, 1);
+                //Toon 2e deck
+                PlayerDeckPanelBorder2.Visibility = Visibility.Visible;
+                PlayerDeckPanel2.Visibility = Visibility.Visible;
+                //Verplaats Icoon en Score
+                PlayerIconPanel.SetValue(Grid.ColumnSpanProperty, 1);
+                PlayerScorePanel.SetValue(Grid.ColumnSpanProperty, 1);
+                PlayerScorePanel.SetValue(Grid.ColumnProperty, 5);
+                //Vergroot Tafel
+                PlayerTable.SetValue(Grid.ColumnSpanProperty, 4);
+                PlayerTable.SetValue(Grid.ColumnProperty, 1);
+                PlayerTable.Margin = new Thickness(15, 0, 10, 0);
+                //Voeg marges toe dat ze niet te veel aan de uiteinde plakken
+                PlayerDeckPanel.Margin = new Thickness(30, 0, 5, 0);
+                PlayerDeckPanelBorder.Margin = new Thickness(30, 0, 5, 0);
+            }
+            else
+            {
+                //Verplaats de eerste deck naar +1 column
+                PlayerDeckPanelBorder.SetValue(Grid.ColumnProperty, 2);
+                PlayerDeckPanel.SetValue(Grid.ColumnProperty, 2);
+                //Verberg 2e deck
+                PlayerDeckPanelBorder2.Visibility = Visibility.Collapsed;
+                PlayerDeckPanel2.Visibility = Visibility.Collapsed;
+                //Verplaats Icoon en Score
+                PlayerIconPanel.SetValue(Grid.ColumnSpanProperty, 2);
+                PlayerScorePanel.SetValue(Grid.ColumnSpanProperty, 2);
+                PlayerScorePanel.SetValue(Grid.ColumnProperty, 4);
+                //Verklein Tafel
+                PlayerTable.SetValue(Grid.ColumnSpanProperty, 2);
+                PlayerTable.SetValue(Grid.ColumnProperty, 2);
+                PlayerTable.Margin = new Thickness(0);
+                //Reset Marges
+                PlayerDeckPanel.Margin = new Thickness(0);
+                PlayerDeckPanelBorder.Margin = new Thickness(0, 5, 0, 5);
+            }
+        }
+
+        private void PlayerDeckPanel_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            //Is Sender een Dockpanel?
+            if (sender is DockPanel)
+            {
+                DockPanel Dpanel = (DockPanel)sender;
+
+                if (Dpanel.Name == "PlayerDeckPanel")
+                {
+                    LblPlayerScore.Content = PlayerHandValue.Sum().ToString();
+                }
+                else
+                {
+                    LblPlayerScore.Content = PlayerHandValue2.Sum().ToString();
+                }
+
+                return;
+            }
+            
+            //Is Sender een border?
+            Border border = (Border)sender;
+
+            if (border.Name == "PlayerDeckPanelBorder")
+            {
+                LblPlayerScore.Content = PlayerHandValue.Sum().ToString();
+            }
+            else
+            {
+                LblPlayerScore.Content = PlayerHandValue2.Sum().ToString();
+            }
+        }
+
+        private void PlayerDeckPanel_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
             UpdateDisplayScore();
         }
     }
