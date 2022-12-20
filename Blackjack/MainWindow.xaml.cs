@@ -137,6 +137,9 @@ namespace Blackjack
             PlayerDeckPanel2.Children.Clear();
             CpuDeckPanel.Children.Clear();
 
+            //ICONS
+            IconResize(null);
+
             //other values
             Soft17Clear = false;
             TxtResults.Foreground = Brushes.White;
@@ -148,6 +151,54 @@ namespace Blackjack
             ActiveDeck = 1;
             HighlightActiveDeck();
             RepositionDeckPanel(false);
+        }
+
+        private void IconResize(bool? Player)
+        {
+            if (!Player.HasValue)
+            {
+                TxtPlayerIcon.FontSize = 82;
+                PlayerEllipse.Height = 120;
+                PlayerEllipse.Width = 120;
+                PlayerIconPanel.Height = 120;
+                PlayerIconPanel.Width = 120;
+
+                TxtCpuIcon.FontSize = 82;
+                CpuEllipse.Height = 120;
+                CpuEllipse.Width = 120;
+                CpuIconPanel.Height = 120;
+                CpuIconPanel.Width = 120;
+                return;
+            }
+
+            if (Player.Value == true)
+            {
+                TxtPlayerIcon.FontSize = 112;
+                PlayerEllipse.Height = 160;
+                PlayerEllipse.Width = 160;
+                PlayerIconPanel.Height = 160;
+                PlayerIconPanel.Width = 160;
+
+                TxtCpuIcon.FontSize = 82;
+                CpuEllipse.Height = 120;
+                CpuEllipse.Width = 120;
+                CpuIconPanel.Height = 120;
+                CpuIconPanel.Width = 120;
+            }
+            else
+            {
+                TxtCpuIcon.FontSize = 112;
+                CpuEllipse.Height = 160;
+                CpuEllipse.Width = 160;
+                CpuIconPanel.Height = 160;
+                CpuIconPanel.Width = 160;
+
+                TxtPlayerIcon.FontSize = 82;
+                PlayerEllipse.Height = 120;
+                PlayerEllipse.Width = 120;
+                PlayerIconPanel.Height = 120;
+                PlayerIconPanel.Width = 120;
+            }
         }
 
         private void Button_Enabling(string ButtonNames)
@@ -222,6 +273,15 @@ namespace Blackjack
             else
             {
                 BtnSplit.Visibility = Visibility.Collapsed;
+            }
+
+            if (ButtonNames.Contains("Double"))
+            {
+                BtnDoubleDown.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                BtnDoubleDown.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -449,13 +509,17 @@ namespace Blackjack
 
             //Re-enable the needed buttons
             //2de Ace waarde word als 1 opgeslagen dus split word niet herkent in de 2e if statement
-            if (PlayerDeck.ElementAt(0).Contains("Ace") && PlayerDeck.ElementAt(1).Contains("Ace")) 
+            if (PlayerDeck.ElementAt(0).Contains("Ace") && PlayerDeck.ElementAt(1).Contains("Ace") && Money >= Bet * 2) 
             {
-                Button_Enabling("Hit Stand Split");
+                Button_Enabling("Hit Stand Split Double");
             }
-            else if (PlayerHandValue.ElementAt(0) == PlayerHandValue.ElementAt(1))
+            else if (PlayerHandValue.ElementAt(0) == PlayerHandValue.ElementAt(1) && Money >= Bet * 2)
             {
-                Button_Enabling("Hit Stand Split");
+                Button_Enabling("Hit Stand Split Double");
+            }
+            else if (Money >= Bet * 2)
+            {
+                Button_Enabling("Hit Stand Double");
             }
             else
             {
@@ -465,6 +529,9 @@ namespace Blackjack
 
         private void BtnHit_Click(object sender, RoutedEventArgs e)
         {
+            //Hide split or double button
+            Button_Enabling("Hit Stand");
+
             AddCard(PullCard(), true, ActiveDeck);
             FixOverFlow(sender, e, true);
 
@@ -794,14 +861,17 @@ namespace Blackjack
             if (Result == "Player")
             {
                 UpdateResultText("Won", "Green");
+                //PlayerIcon
                 TxtPlayerIcon.Text = "😎";
                 LblPlayerScore.FontWeight = FontWeights.Bold;
+                IconResize(true);
             }
             else if (Result == "Cpu")
             {
                 UpdateResultText("Lost", "Red");
                 TxtPlayerIcon.Text = "😢";
                 LblCpuScore.FontWeight = FontWeights.Bold;
+                IconResize(false);
             }
             else
             {
@@ -809,6 +879,7 @@ namespace Blackjack
                 TxtPlayerIcon.Text = "😅";
                 LblPlayerScore.FontWeight = FontWeights.Bold;
                 LblCpuScore.FontWeight = FontWeights.Bold;
+                IconResize(null);
             }
 
             //Hand out PAY
@@ -823,8 +894,9 @@ namespace Blackjack
             }
             //Disable buttons
             Button_Enabling("");
+            await Task.Delay(1500); //Wait 
             LblPlayerScore.FontWeight = FontWeights.Normal;
-            await Task.Delay(1500); //Wait 3 seconds
+            IconResize(null);
 
             ActiveDeck = 2;
             UpdateDisplayScore();
@@ -873,12 +945,14 @@ namespace Blackjack
                 UpdateResultText("Won", "Green");
                 TxtPlayerIcon.Text = "😎";
                 LblPlayerScore.FontWeight = FontWeights.Bold;
+                IconResize(true);
             }
             else if (Result == "Cpu")
             {
                 UpdateResultText("Lost", "Red");
                 TxtPlayerIcon.Text = "😢";
                 LblCpuScore.FontWeight = FontWeights.Bold;
+                IconResize(false);
             }
             else
             {
@@ -886,6 +960,7 @@ namespace Blackjack
                 TxtPlayerIcon.Text = "😅";
                 LblPlayerScore.FontWeight = FontWeights.Bold;
                 LblCpuScore.FontWeight = FontWeights.Bold;
+                IconResize(null);
             }
 
             //Hand out PAY
@@ -1239,6 +1314,23 @@ namespace Blackjack
         private void PlayerDeckPanel_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             UpdateDisplayScore();
+        }
+
+        private void BtnDoubleDown_Click(object sender, RoutedEventArgs e)
+        {
+            //Money related
+            Money -= Bet;
+            Bet *= 2;
+            MoneyRelatedActions();
+
+            //Add Card
+            AddCard(PullCard(), true, ActiveDeck);
+            FixOverFlow(sender, e, true);
+            //Show Score
+            UpdateDisplayScore();
+
+            //End Turn
+            Cpu_Turn(sender, e);
         }
     }
 }

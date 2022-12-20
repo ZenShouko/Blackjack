@@ -153,12 +153,12 @@
         <!--CPU Score-->
         <Grid Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115"/>
-            <Label x:Name="LblCpuScore" Content="x" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
+            <Label x:Name="LblCpuScore" Content="." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
                FontFamily="Arial" Foreground="MintCream"/>
         </Grid>
         <!--CPU Icon-->
-        <Canvas Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Width="120" Height="120">
-            <Ellipse Width="120" Height="120" Fill="Lavender" Opacity="0.5"/>
+        <Canvas x:Name="CpuIconPanel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Width="120" Height="120">
+            <Ellipse x:Name="CpuEllipse" Width="120" Height="120" Fill="Lavender" Opacity="0.5"/>
             <TextBlock x:Name="TxtCpuIcon" Text="🤖" FontSize="82" Margin="3, 0"/>
         </Canvas>
         
@@ -189,10 +189,11 @@
         
 
         <!--Buttons-->
-        <StackPanel Visibility="Visible" Orientation="Horizontal" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="4" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+        <StackPanel Visibility="Visible" Orientation="Horizontal" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="6" VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnDeel" Content="✨Start✨" Click="BtnDeel_Click"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnHit" Content="Hit" Click="BtnHit_Click"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnStand" Content="Stand" Click="BtnStand_Click"/>
+            <Button Style="{StaticResource DefaultButton}" x:Name="BtnDoubleDown" Content="Double" Click="BtnDoubleDown_Click"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnSplit" Content="Split" Click="BtnSplit_Click"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnChangeBet" Content="Change Bet" Click="BtnChangeBet_Click" FontSize="18"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnContinue" Content="Continue" Click="BtnContinue_Click" FontSize="20"/>
@@ -218,12 +219,12 @@
         <!--PlayerScore-->
         <Grid x:Name="PlayerScorePanel" Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115"/>
-            <Label x:Name="LblPlayerScore" Content="x" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
+            <Label x:Name="LblPlayerScore" Content="." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
                FontFamily="Arial" Foreground="MintCream"/>
         </Grid>
         <!--PlayerIcon-->
         <Canvas x:Name="PlayerIconPanel" Grid.Row="4" Grid.ColumnSpan="2" Width="120" Height="120">
-            <Ellipse Width="120" Height="120" Fill="Lavender" Opacity="0.5"/>
+            <Ellipse x:Name="PlayerEllipse" Width="120" Height="120" Fill="Lavender" Opacity="0.5"/>
             <TextBlock x:Name="TxtPlayerIcon" Text="🤔" FontSize="82" Margin="3 ,0"/>
         </Canvas>
         
