@@ -8,3 +8,5 @@
 	 The list already contains all the values of the cards that we posses. We can just use a sum to get the total value of a deck.
 	 ==> Replacing [PlayerHand] with [PlayerHandValue.Sum()];
 	 ISSUE SOLVED :)
+
+ - We can try to remove CardName and just use the last item in playerhand.

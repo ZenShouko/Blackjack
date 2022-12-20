@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blackjack"
-        mc:Ignorable="d" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight"
+        mc:Ignorable="d" ResizeMode="CanResize" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight"
         Title="BlackJack" Height="auto" Width="auto">
     <Window.Resources>
         <!--Default buttons-->
@@ -181,9 +181,16 @@
             <TextBlock x:Name="TxtDeckCount" Text="52" Foreground="White" FontSize="16" VerticalAlignment="Center" FontWeight="DemiBold" Margin="5"/>
         </StackPanel>
         
-            <!--Buttons-->
+        <!--Deck Shuffle Notification-->
+        <Border Background="DarkOliveGreen" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center" 
+                Padding="1" Margin="0" Visibility="Collapsed" BorderBrush="Black" BorderThickness="2" CornerRadius="10" x:Name="ShuffleNotifBorder">
+            <TextBlock Text="  Deck got shuffled :)  " FontSize="17" Foreground="White"  />
+        </Border>
+        
+
+        <!--Buttons-->
         <StackPanel Visibility="Visible" Orientation="Horizontal" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="4" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-            <Button Style="{StaticResource DefaultButton}" x:Name="BtnDeel" Content="✨Start✨" Click="BtnDeel_Click" Visibility="Visible"/>
+            <Button Style="{StaticResource DefaultButton}" x:Name="BtnDeel" Content="✨Start✨" Click="BtnDeel_Click"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnHit" Content="Hit" Click="BtnHit_Click"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnStand" Content="Stand" Click="BtnStand_Click"/>
             <Button Style="{StaticResource DefaultButton}" x:Name="BtnSplit" Content="Split" Click="BtnSplit_Click"/>
@@ -195,18 +202,18 @@
 
             <!--Player Side-->
         <Border Visibility="Visible" x:Name="PlayerTable" Opacity="0.3" Background="Black" BorderBrush="Lavender" BorderThickness="5" 
-                CornerRadius="20" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4"/>
+                CornerRadius="20" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" Margin="0, 200, 0, -200"/>
         <!--PlayerDeck1-->
-        <Border Visibility="Visible" x:Name="PlayerDeckPanelBorder" CornerRadius="10, 10, 20, 16" BorderBrush="DarkSlateGray" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.6" 
+        <Border Visibility="Collapsed" x:Name="PlayerDeckPanelBorder" CornerRadius="10, 10, 20, 16" BorderBrush="DarkSlateGray" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.6" 
                 Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" Margin="0, 5" Width="170" Height="175" 
                 MouseEnter="PlayerDeckPanel_MouseEnter" MouseLeave="PlayerDeckPanel_MouseLeave"/>
-        <DockPanel Visibility="Visible" x:Name="PlayerDeckPanel" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" 
+        <DockPanel Visibility="Collapsed" x:Name="PlayerDeckPanel" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" 
                    HorizontalAlignment="Center" VerticalAlignment="Center" MouseEnter="PlayerDeckPanel_MouseEnter" MouseLeave="PlayerDeckPanel_MouseLeave"/>
         <!--PlayerDeck2-->
-        <Border Visibility="Visible" x:Name="PlayerDeckPanelBorder2" CornerRadius="10, 10, 20, 16" BorderBrush="DarkSlateGray" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.3" 
+        <Border Visibility="Collapsed" x:Name="PlayerDeckPanelBorder2" CornerRadius="10, 10, 20, 16" BorderBrush="DarkSlateGray" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.3" 
                 Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="4" Margin="5, 5, 30, 5"  Height="175" 
                 MouseEnter="PlayerDeckPanel_MouseEnter" MouseLeave="PlayerDeckPanel_MouseLeave"/>
-        <DockPanel Visibility="Visible" x:Name="PlayerDeckPanel2" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"
+        <DockPanel Visibility="Collapsed" x:Name="PlayerDeckPanel2" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"
                    Opacity="0.4" Margin="5, 0, 30, 0" MouseEnter="PlayerDeckPanel_MouseEnter" MouseLeave="PlayerDeckPanel_MouseLeave"/>
         <!--PlayerScore-->
         <Grid x:Name="PlayerScorePanel" Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -221,9 +228,9 @@
         </Canvas>
         
             <!--BetPanel-->
-        <Border Visibility="Collapsed" x:Name="BetPanelBorder" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="4" Background="SlateGray" Opacity="0.8" Height="180" Width="400" Margin="0, 0, 0, 10"
+        <Border Visibility="Visible" x:Name="BetPanelBorder" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="4" Background="SlateGray" Opacity="0.8" Height="180" Width="400" Margin="0, 0, 0, 10"
                 CornerRadius="20" BorderThickness="2" BorderBrush="Black"/>
-        <StackPanel Visibility="Collapsed" x:Name="BetPanel" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="4" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" 
+        <StackPanel Visibility="Visible" x:Name="BetPanel" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="4" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center" 
                     Height="180" Width="400" Margin="0, 0, 0, 10">
             <StackPanel Orientation="Horizontal" Background="WhiteSmoke" HorizontalAlignment="Center" Margin="0, 2, 0, 0">
                 <TextBlock x:Name="TxtAmount" Text="€100" FontSize="14" HorizontalAlignment="Center" Margin="35, 0"/>

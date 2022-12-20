@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -356,6 +357,8 @@ namespace Blackjack
 
                 PlayerDeckPanel.Margin = new Thickness(0);
                 PlayerDeckPanelBorder.Margin = new Thickness(0);
+                PlayerDeckPanel2.Margin = new Thickness(0);
+                PlayerDeckPanelBorder2.Margin = new Thickness(0);
                 PlayerDeckPanel.Visibility = Visibility.Visible;
                 PlayerDeckPanelBorder.Visibility = Visibility.Visible;
 
@@ -379,6 +382,8 @@ namespace Blackjack
                     PlayerTable.Margin = new Thickness(0, DeckMargin, 0, (DeckMargin - (DeckMargin * 2)));
                     PlayerDeckPanelBorder.Margin = new Thickness(0, DeckMargin, 0, (DeckMargin - (DeckMargin * 2)));
                     PlayerDeckPanel.Margin = new Thickness(0, DeckMargin, 0, (DeckMargin - (DeckMargin * 2)));
+                    PlayerDeckPanelBorder2.Margin = new Thickness(0, DeckMargin, 0, (DeckMargin - (DeckMargin * 2)));
+                    PlayerDeckPanel2.Margin = new Thickness(0, DeckMargin, 0, (DeckMargin - (DeckMargin * 2)));
 
                     if (DeckPanelOpacity != 0)
                     {
@@ -417,6 +422,7 @@ namespace Blackjack
             //Verdeel 2 kaarten
             for (int i = 0; i < 2; i++)
             {
+                //AddCard(PullCard(), true, 1);
                 AddCard(PullCard(), true, 1);
                 UpdateDisplayScore();
                 await Task.Delay(500);
@@ -442,7 +448,19 @@ namespace Blackjack
             }
 
             //Re-enable the needed buttons
-            Button_Enabling("Hit Stand Split Deel");
+            //2de Ace waarde word als 1 opgeslagen dus split word niet herkent in de 2e if statement
+            if (PlayerDeck.ElementAt(0).Contains("Ace") && PlayerDeck.ElementAt(1).Contains("Ace")) 
+            {
+                Button_Enabling("Hit Stand Split");
+            }
+            else if (PlayerHandValue.ElementAt(0) == PlayerHandValue.ElementAt(1))
+            {
+                Button_Enabling("Hit Stand Split");
+            }
+            else
+            {
+                Button_Enabling("Hit Stand");
+            }
         }
 
         private void BtnHit_Click(object sender, RoutedEventArgs e)
@@ -539,19 +557,39 @@ namespace Blackjack
             ShuffleDeck();
         }
 
-        private void ShuffleDeck()
+        private async void ShuffleDeck()
         {
-            int CardsLeft = Deck.Count - CardsInGame.Count;
+            bool PlayAnimation = false;
 
             //Reshuffle AllCards if all cards have been played
             if (CardsInGame.Count == Deck.Count())
             {
-                UpdateResultText("Deck Got Shuffled:)", "White");
                 CardsInGame.Clear();
+                PlayAnimation = true;
+                TxtDeckCount.Text = (Deck.Count() - CardsInGame.Count()).ToString();
+            }
+
+            if (PlayAnimation)
+            {
+                int margin = 0;
+                ShuffleNotifBorder.Visibility = Visibility.Visible;
+
+                //Animation
+                while(margin != -10)
+                {
+                    await Task.Delay(50);
+                    margin--;
+                    ShuffleNotifBorder.Margin = new Thickness(margin);
+                }
+
+                //Reset
+                await Task.Delay(3000);
+                ShuffleNotifBorder.Visibility = Visibility.Collapsed;
+                ShuffleNotifBorder.Margin = new Thickness(0);
             }
 
             //Display
-            TxtDeckCount.Text = CardsLeft.ToString();
+            TxtDeckCount.Text = (Deck.Count() - CardsInGame.Count()).ToString();
         }
 
         void FixOverFlow(object sender, RoutedEventArgs e, bool Player)
@@ -767,7 +805,7 @@ namespace Blackjack
             }
             else
             {
-                UpdateResultText("Draw", "Orange");
+                UpdateResultText("Push", "Orange");
                 TxtPlayerIcon.Text = "😅";
                 LblPlayerScore.FontWeight = FontWeights.Bold;
                 LblCpuScore.FontWeight = FontWeights.Bold;
@@ -785,12 +823,15 @@ namespace Blackjack
             }
             //Disable buttons
             Button_Enabling("");
-            await Task.Delay(3000); //Wait 3 seconds
+            LblPlayerScore.FontWeight = FontWeights.Normal;
+            await Task.Delay(1500); //Wait 3 seconds
 
             ActiveDeck = 2;
             UpdateDisplayScore();
             HighlightActiveDeck();
+            UpdateResultText("...", "White");
 
+            await Task.Delay(800);
             //Execute same steps as above but this time for second deck
             //Calculate Result
             if (CpuHandValue.Sum() == 21 && PlayerHandValue2.Sum() != 21)
@@ -841,7 +882,7 @@ namespace Blackjack
             }
             else
             {
-                UpdateResultText("Draw", "Orange");
+                UpdateResultText("Push", "Orange");
                 TxtPlayerIcon.Text = "😅";
                 LblPlayerScore.FontWeight = FontWeights.Bold;
                 LblCpuScore.FontWeight = FontWeights.Bold;
@@ -849,16 +890,14 @@ namespace Blackjack
 
             //Hand out PAY
             BetHandling(Result);
-            //Enabling da buttons
-            Button_Enabling("ChangeBet Continue AllIn");
         }
 
         private void BetHandling(string Result)
         {
             if (Result == "Player")
             {
-                //BLACKJACK?
-                if (PlayerDeck.Count == 2 && PlayerHandValue.Sum() == 21)
+                //BLACKJACK? [NIET MOGELIJK BIJ EEN SPLIT!]
+                if (PlayerDeck.Count == 2 && PlayerHandValue.Sum() == 21 && PlayerHandValue2.Count == 0)
                 {
                     float i = Bet * 2.5f;
                     Math.Round(i);
@@ -867,22 +906,23 @@ namespace Blackjack
                 }
                 else
                 {
-                    Money += Bet;
+                    Money += Bet * 2;
                     TxtResults.Text += $" €{Bet * 2}";
                 }
             }
             else if (Result == "Draw")
             {
-                //Money += Bet;
+                Money += Bet;
             }
             else
             {
-                Money -= Bet;
                 TxtResults.Text += $" €{Bet}";
             }
 
             //Update Header
             MoneyRelatedActions();
+            //Enabling da buttons
+            Button_Enabling("ChangeBet Continue AllIn");
             //Game Over?
             GameOver();
         }
@@ -894,14 +934,14 @@ namespace Blackjack
             TxtBet.Text = $"BET= €{Bet}";
 
             //MIDDLE-SECTION
-            TxtBetWin.Text = $"WIN= €{Money + Bet}";
-            if (Money - Bet <= 0)
+            TxtBetWin.Text = $"WIN= €{Money + Bet * 2}";
+            if (Money <= 0)
             {
                 TxtBetLose.Text = "LOSE= GAME OVER!";
             }
             else
             {
-                TxtBetLose.Text = $"LOSE= €{Money - Bet}";
+                TxtBetLose.Text = $"LOSE= €{Money}";
             }
 
             //RIGHT-SECTION
@@ -922,6 +962,9 @@ namespace Blackjack
         private async void GameOver()
         {
             if (Money > 0) return;
+
+            //Avoid a game over if player has a split and 2nd deck hasn't been checked yet
+            if (PlayerHandValue2.Count > 0 && ActiveDeck == 1) { return; }
 
             Button_Enabling("");
 
@@ -962,6 +1005,9 @@ namespace Blackjack
                 return;
             }
 
+            //Place Bet
+            Money -= Bet;
+
             //Hide BetPanel Show PlayerDeck
             DisplayDeck(true);
 
@@ -1001,6 +1047,7 @@ namespace Blackjack
                 return;
             }
 
+            Money -= Bet;
             MoneyRelatedActions();
             BtnDeel_Click(sender, e);
         }
@@ -1020,6 +1067,7 @@ namespace Blackjack
         private void BtnAllIn_Click(object sender, RoutedEventArgs e)
         {
             Bet = Money;
+            Money = 0;
             MoneyRelatedActions();
 
             BtnDeel_Click(sender, e);
@@ -1027,7 +1075,20 @@ namespace Blackjack
 
         private async void BtnSplit_Click(object sender, RoutedEventArgs e)
         {
+            //Does player have enough to split?
+            if (Money < Bet)
+            {
+                UpdateResultText("Too broke to split >:D", "White");
+                return;
+            }
+
+            //Take Bet
+            Money -= Bet;
+
+            //Table Preperations for split
+            Button_Enabling("");
             RepositionDeckPanel(true);
+            MoneyRelatedActions();
 
             //Plaats laatst getrokken kaart in de 2e deck lijst
             PlayerDeckPanel.Children.RemoveAt(PlayerDeckPanel.Children.Count - 1);
@@ -1042,14 +1103,15 @@ namespace Blackjack
 
             //Geef aan elke deck 1 kaart
             UpdateDisplayScore();
-            await Task.Delay(750);
+            await Task.Delay(600);
             AddCard(PullCard(), true, 1);
             FixOverFlow(sender, e, true);
             UpdateDisplayScore();
 
-            await Task.Delay(850);
+            await Task.Delay(700);
             ActiveDeck = 2;
             HighlightActiveDeck();
+            await Task.Delay(500);
             AddCard(PullCard(), true, 2);
             FixOverFlow(sender, e, true);
             UpdateDisplayScore();
@@ -1067,7 +1129,12 @@ namespace Blackjack
                 ActiveDeck = 2;
             }
 
-
+            //Start CPU_TURN if player split an ace
+            if (PlayerDeck.ElementAt(0).Contains("Ace") && PlayerDeck2.ElementAt(0).Contains("Ace"))
+            {
+                Cpu_Turn(sender, e);
+                return;
+            }
             //Buttons
             Button_Enabling("Hit Stand");
 
@@ -1130,7 +1197,7 @@ namespace Blackjack
                 //Verklein Tafel
                 PlayerTable.SetValue(Grid.ColumnSpanProperty, 2);
                 PlayerTable.SetValue(Grid.ColumnProperty, 2);
-                PlayerTable.Margin = new Thickness(0);
+                PlayerTable.Margin = new Thickness(0, PlayerTable.Margin.Top, 0, PlayerTable.Margin.Bottom);
                 //Reset Marges
                 PlayerDeckPanel.Margin = new Thickness(0);
                 PlayerDeckPanelBorder.Margin = new Thickness(0, 5, 0, 5);
