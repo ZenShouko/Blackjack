@@ -1252,7 +1252,7 @@ namespace Blackjack
             Cpu_Turn(sender, e);
         }
 
-        private async void TxtHistoriek_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void TxtHistoriek_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             
         }
