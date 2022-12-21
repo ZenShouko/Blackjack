@@ -28,6 +28,11 @@ namespace Blackjack
             Reset_Table();
             ResizeDeck();
             MoneyRelatedActions();
+
+            for (int i= 0; i < HistoriekLijst.Rank; i++)
+            {
+                HistoriekLijst[i, 0] = $"NULL{i}";
+            }
         }
 
         //Lijsten
@@ -53,10 +58,12 @@ namespace Blackjack
         List<int> PlayerHandValue = new List<int>(); //ALL CARD VALUES FROM PLAYER
         List<int> PlayerHandValue2 = new List<int>(); //Card values for second deck (player)
         List<int> CpuHandValue = new List<int>(); //ALL CARD VALUES FROM CPU
+        string[,] HistoriekLijst = new string[9, 0];
         //BETTING
         int Money = 100;
         int Bet = 0;
         int ActiveDeck = 1; //Welke Deck word nu gebruikt? (speler)
+        int Ronde = 0;
         //Andere Variabelen
         Random random = new Random();
         bool Soft17Clear = false;
@@ -407,6 +414,7 @@ namespace Blackjack
             LblPlayerScore.Content = "...";
             LblCpuScore.Content = "...";
             UpdateResultText("...", "White");
+            Ronde++;
 
             //Verdeel 2 kaarten
             for (int i = 0; i < 2; i++)
@@ -786,6 +794,20 @@ namespace Blackjack
                 Result = "Player";
             }
 
+            //Voeg toe aan historiek
+            if (Result == "Player")
+            {
+                UpdateHistoriek(true);
+            }
+            else if (Result == "Cpu")
+            {
+                UpdateHistoriek(false);
+            }
+            else
+            {
+                UpdateHistoriek(null);
+            }
+
             //Display Result
             if (Result == "Player")
             {
@@ -1053,6 +1075,7 @@ namespace Blackjack
             Button_Enabling("");
             Money = 100;
             Bet = 0;
+            Ronde = 0;
             DisplayDeck(false);
             await Task.Delay(500);
             Reset_Table();
@@ -1254,7 +1277,13 @@ namespace Blackjack
 
         private void TxtHistoriek_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            
+            string output = "";
+            foreach (string row in HistoriekLijst)
+            {
+                output += row;
+            }
+
+            MessageBox.Show(output);
         }
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e)
@@ -1265,6 +1294,35 @@ namespace Blackjack
                 TxtTime.Text = DateTime.Now.ToString($"HH:mm:ss");
                 await Task.Delay(1000);
             }
+        }
+
+        private void UpdateHistoriek(bool ? Win)
+        {
+            string Resultaat = "";
+
+            if (Win.HasValue == true)
+            {
+                Resultaat = "gewonnen";
+            }
+            else if (Win.HasValue == false)
+            {
+                Resultaat = "verloren";
+            }
+            else
+            {
+                Resultaat = "niks";
+            }
+
+            string HistoriekLog = $"Ronde {Ronde}: {Bet} {Resultaat}-{Money}/Bank";
+
+            //Shuif alle waardes op met 1
+            for (int i = 0; i < 9; i++)
+            {
+                HistoriekLijst[i + 1, 0] = HistoriekLijst[i, 0];
+            }
+
+            //Voeg nieuwe waarde toe
+            HistoriekLijst[0, 0] = HistoriekLog;
         }
     }
 }
