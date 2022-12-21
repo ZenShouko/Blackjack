@@ -203,86 +203,15 @@ namespace Blackjack
 
         private void Button_Enabling(string ButtonNames)
         {
-            if (ButtonNames.Contains("Deel"))
-            {
-                BtnDeel.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                BtnDeel.Visibility = Visibility.Collapsed;
-            }
-
-            if (ButtonNames.Contains("Hit"))
-            {
-                BtnHit.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                BtnHit.Visibility = Visibility.Collapsed;
-            }
-
-            if (ButtonNames.Contains("Stand"))
-            {
-                BtnStand.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                BtnStand.Visibility = Visibility.Collapsed;
-            }
-
-            if (ButtonNames.Contains("ChangeBet"))
-            {
-                BtnChangeBet.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                BtnChangeBet.Visibility = Visibility.Collapsed;
-            }
-
-            if (ButtonNames.Contains("Continue"))
-            {
-                BtnContinue.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                BtnContinue.Visibility = Visibility.Collapsed;
-            }
-
-            if (ButtonNames.Contains("NewGame"))
-            {
-                BtnNewGame.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                BtnNewGame.Visibility = Visibility.Collapsed;
-            }
-
-            if (ButtonNames.Contains("AllIn"))
-            {
-                BtnAllIn.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                BtnAllIn.Visibility = Visibility.Collapsed;
-            }
-
-            if (ButtonNames.Contains("Split"))
-            {
-                BtnSplit.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                BtnSplit.Visibility = Visibility.Collapsed;
-            }
-
-            if (ButtonNames.Contains("Double"))
-            {
-                BtnDoubleDown.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                BtnDoubleDown.Visibility = Visibility.Collapsed;
-            }
+            BtnDeel.Visibility = ButtonNames.Contains("Deel") ? Visibility.Visible : Visibility.Collapsed;
+            BtnHit.Visibility = ButtonNames.Contains("Hit") ? Visibility.Visible : Visibility.Collapsed;
+            BtnStand.Visibility = ButtonNames.Contains("Stand") ? Visibility.Visible : Visibility.Collapsed;
+            BtnChangeBet.Visibility = ButtonNames.Contains("ChangeBet") ? Visibility.Visible : Visibility.Collapsed;
+            BtnContinue.Visibility = ButtonNames.Contains("Continue") ? Visibility.Visible : Visibility.Collapsed;
+            BtnNewGame.Visibility = ButtonNames.Contains("NewGame") ? Visibility.Visible : Visibility.Collapsed;
+            BtnAllIn.Visibility = ButtonNames.Contains("AllIn") ? Visibility.Visible : Visibility.Collapsed;
+            BtnSplit.Visibility = ButtonNames.Contains("Split") ? Visibility.Visible : Visibility.Collapsed;
+            BtnDoubleDown.Visibility = ButtonNames.Contains("Double") ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void UpdateDisplayScore()
@@ -1008,19 +937,9 @@ namespace Blackjack
             //LEFT SECTION
             TxtBet.Text = $"BET= €{Bet}";
 
-            //MIDDLE-SECTION
-            TxtBetWin.Text = $"WIN= €{Money + Bet * 2}";
-            if (Money <= 0)
-            {
-                TxtBetLose.Text = "LOSE= GAME OVER!";
-            }
-            else
-            {
-                TxtBetLose.Text = $"LOSE= €{Money}";
-            }
-
             //RIGHT-SECTION
             TxtAmount.Text = $"€{Money}";
+            //Betpanel
             TxtMoney.Text = $"MONEY= €{Money}";
 
             //Edit Slider
@@ -1331,6 +1250,21 @@ namespace Blackjack
 
             //End Turn
             Cpu_Turn(sender, e);
+        }
+
+        private async void TxtHistoriek_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            
+        }
+
+        private async void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            bool active = true;
+            while (active)
+            {
+                TxtTime.Text = DateTime.Now.ToString($"HH:mm:ss");
+                await Task.Delay(1000);
+            }
         }
     }
 }

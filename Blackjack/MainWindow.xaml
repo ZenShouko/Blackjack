@@ -107,7 +107,7 @@
         </Style>
     </Window.Resources>
     
-    <Grid Height="625" Width="800">
+    <Grid Height="625" Width="800" Loaded="Grid_Loaded">
             <!--GRID Properties-->
         <Grid.Background>
             <ImageBrush ImageSource="/PNG/Casino_Texture.jpg" Stretch="None" TileMode="Tile" Viewport="0, 0, 100, 100" ViewportUnits="Absolute"/>
@@ -134,10 +134,12 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="0, 0, 0, 5">
             <TextBlock x:Name="TxtBet" Text="BET= €10 " Foreground="White" FontSize="14" FontWeight="DemiBold"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Grid.ColumnSpan="2" Margin="0, 0, 0, 5">
-            <TextBlock x:Name="TxtBetWin" Text="WIN= €110" Foreground="Green" FontSize="14" FontWeight="DemiBold"/>
-            <TextBlock Text=" || " Foreground="DarkGray" FontSize="14" FontWeight="Normal"/>
-            <TextBlock x:Name="TxtBetLose" Text="LOSE= €90" Foreground="DarkRed" FontSize="14" FontWeight="DemiBold"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Margin="0, 0, 0, 5">
+            <TextBlock x:Name="TxtHistoriek" Text="● Historiek ●" Foreground="LightBlue" FontSize="14" FontWeight="DemiBold" TextDecorations="Underline"
+                       Cursor="Hand" MouseDown="TxtHistoriek_MouseDown"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Margin="0, 0, 0, 5">
+            <TextBlock x:Name="TxtTime" Text="HH/MM/SS" Foreground="LightGray" FontSize="14" FontWeight="DemiBold"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="4" Grid.ColumnSpan="2" Margin="0, 0, 0, 5">
             <TextBlock x:Name="TxtMoney" Text="MY MONEY= " Foreground="White" FontSize="14" FontWeight="DemiBold"/>
