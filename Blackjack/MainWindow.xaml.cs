@@ -155,6 +155,7 @@ namespace Blackjack
             PlayerHandValue.Clear();
             PlayerHandValue2.Clear();
             CpuHandValue.Clear();
+            Array.Clear(Historiek, 0, Historiek.Length);
 
             //Cards on screen
             PlayerDeckPanel.Children.Clear();
@@ -436,7 +437,6 @@ namespace Blackjack
             //Verdeel 2 kaarten
             for (int i = 0; i < 2; i++)
             {
-                //AddCard(PullCard(), true, 1);
                 AddCard(PullCard(), true, 1);
                 UpdateDisplayScore();
                 await Task.Delay(500);
@@ -728,7 +728,7 @@ namespace Blackjack
                 if (CpuHandValue.Sum() < 22)
                 {
                     UpdateDisplayScore();
-                    await Task.Delay(500);
+                    await Task.Delay(700);
                 }
             }
 
@@ -752,7 +752,7 @@ namespace Blackjack
             {
                 AddCard(PullCard(), false, 0);
                 UpdateDisplayScore();
-                await Task.Delay(500);
+                await Task.Delay(700);
             }
 
             //Wait
@@ -773,43 +773,83 @@ namespace Blackjack
             }
         }
 
-        private async void Match_Results()
+        public string CalculateResult(bool Deck1)
         {
-            string Result;
-
-            //Calculate Result
-            if (CpuHandValue.Sum() == 21 && PlayerHandValue.Sum() != 21)
+            if (Deck1)
             {
-                Result = "Cpu";
-            }
-            else if (CpuHandValue.Sum() == 21 && PlayerHandValue.Sum() == 21)
-            {
-                Result = "Draw";
-            }
-            else if (CpuHandValue.Sum() > 21 && PlayerHandValue.Sum() > 21)
-            {
-                Result = "Draw";
-            }
-            else if (CpuHandValue.Sum() == PlayerHandValue.Sum())
-            {
-                Result = "Draw";
-            }
-            else if (CpuHandValue.Sum() > 21)
-            {
-                Result = "Player";
-            }
-            else if (CpuHandValue.Sum() > PlayerHandValue.Sum())
-            {
-                Result = "Cpu";
-            }
-            else if (PlayerHandValue.Sum() > 21)
-            {
-                Result = "Cpu";
+                if (CpuHandValue.Sum() == 21 && PlayerHandValue.Sum() != 21)
+                {
+                    return "Cpu";
+                }
+                else if (CpuHandValue.Sum() == 21 && PlayerHandValue.Sum() == 21)
+                {
+                    return "Draw";
+                }
+                else if (CpuHandValue.Sum() > 21 && PlayerHandValue.Sum() > 21)
+                {
+                    return "Draw";
+                }
+                else if (CpuHandValue.Sum() == PlayerHandValue.Sum())
+                {
+                    return "Draw";
+                }
+                else if (CpuHandValue.Sum() > 21)
+                {
+                    return "Player";
+                }
+                else if (CpuHandValue.Sum() > PlayerHandValue.Sum())
+                {
+                    return "Cpu";
+                }
+                else if (PlayerHandValue.Sum() > 21)
+                {
+                    return "Cpu";
+                }
+                else
+                {
+                    return "Player";
+                }
             }
             else
             {
-                Result = "Player";
+                if (CpuHandValue.Sum() == 21 && PlayerHandValue2.Sum() != 21)
+                {
+                    return "Cpu";
+                }
+                else if (CpuHandValue.Sum() == 21 && PlayerHandValue2.Sum() == 21)
+                {
+                    return "Draw";
+                }
+                else if (CpuHandValue.Sum() > 21 && PlayerHandValue2.Sum() > 21)
+                {
+                    return "Draw";
+                }
+                else if (CpuHandValue.Sum() == PlayerHandValue2.Sum())
+                {
+                    return "Draw";
+                }
+                else if (CpuHandValue.Sum() > 21)
+                {
+                    return "Player";
+                }
+                else if (CpuHandValue.Sum() > PlayerHandValue2.Sum())
+                {
+                    return "Cpu";
+                }
+                else if (PlayerHandValue2.Sum() > 21)
+                {
+                    return "Cpu";
+                }
+                else
+                {
+                    return "Player";
+                }
             }
+        }
+
+        private async void Match_Results()
+        {
+            string Result = CalculateResult(true);
 
             //Display Result
             if (Result == "Player")
@@ -843,60 +883,29 @@ namespace Blackjack
 
             //Hand out PAY
             BetHandling(Result);
-            //Enabling da buttons
-            Button_Enabling("ChangeBet Continue AllIn");
 
             //Check Second Deck ONLY IF NEEDED
             if (PlayerDeck2.Count == 0)
             {
                 return;
             }
+
             //Disable buttons
             Button_Enabling("");
-            await Task.Delay(1500); //Wait 
+            await Task.Delay(1300); //Wait 
             LblPlayerScore.FontWeight = FontWeights.Normal;
             IconResize(null);
 
+            UpdateResultText("...", "White");
+            await Task.Delay(250);
             ActiveDeck = 2;
             UpdateDisplayScore();
             HighlightActiveDeck();
-            UpdateResultText("...", "White");
 
-            await Task.Delay(800);
+            await Task.Delay(1300);
             //Execute same steps as above but this time for second deck
             //Calculate Result
-            if (CpuHandValue.Sum() == 21 && PlayerHandValue2.Sum() != 21)
-            {
-                Result = "Cpu";
-            }
-            else if (CpuHandValue.Sum() == 21 && PlayerHandValue2.Sum() == 21)
-            {
-                Result = "Draw";
-            }
-            else if (CpuHandValue.Sum() > 21 && PlayerHandValue2.Sum() > 21)
-            {
-                Result = "Draw";
-            }
-            else if (CpuHandValue.Sum() == PlayerHandValue2.Sum())
-            {
-                Result = "Draw";
-            }
-            else if (CpuHandValue.Sum() > 21)
-            {
-                Result = "Player";
-            }
-            else if (CpuHandValue.Sum() > PlayerHandValue2.Sum())
-            {
-                Result = "Cpu";
-            }
-            else if (PlayerHandValue2.Sum() > 21)
-            {
-                Result = "Cpu";
-            }
-            else
-            {
-                Result = "Player";
-            }
+            CalculateResult(false);
 
             //Display Result
             if (Result == "Player")
@@ -956,8 +965,7 @@ namespace Blackjack
             UpdateHistoriek(Result);
             //Update Header
             MoneyRelatedActions();
-            //Enabling da buttons
-            Button_Enabling("ChangeBet Continue AllIn");
+            
             //Game Over?
             GameOver();
         }
@@ -986,7 +994,12 @@ namespace Blackjack
 
         private async void GameOver()
         {
-            if (Money > 0) return;
+            if (Money > 0)
+            {
+                //Enabling da buttons
+                Button_Enabling("ChangeBet Continue AllIn");
+                return;
+            }
 
             //Avoid a game over if player has a split and 2nd deck hasn't been checked yet
             if (PlayerHandValue2.Count > 0 && ActiveDeck == 1) { return; }
@@ -1158,6 +1171,8 @@ namespace Blackjack
             //Start CPU_TURN if player split an ace
             if (PlayerDeck.ElementAt(0).Contains("Ace") && PlayerDeck2.ElementAt(0).Contains("Ace"))
             {
+                ActiveDeck = 1;
+                HighlightActiveDeck();
                 Cpu_Turn(sender, e);
                 return;
             }
@@ -1232,6 +1247,12 @@ namespace Blackjack
 
         private void PlayerDeckPanel_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            //Alleen uitvoeren als er een 2de deck aanwezig is
+            if (PlayerDeck2.Count == 0) { return; }
+
+            //Increase font size
+            LblPlayerScore.FontSize = 54;
+
             //Is Sender een Dockpanel?
             if (sender is DockPanel)
             {
@@ -1265,6 +1286,7 @@ namespace Blackjack
         private void PlayerDeckPanel_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             UpdateDisplayScore();
+            LblPlayerScore.FontSize = 48;
         }
 
         private void BtnDoubleDown_Click(object sender, RoutedEventArgs e)

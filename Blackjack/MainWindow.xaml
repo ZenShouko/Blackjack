@@ -155,7 +155,7 @@
         <!--CPU Score-->
         <Grid Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115"/>
-            <Label x:Name="LblCpuScore" Content="." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
+            <Label x:Name="LblCpuScore" Content="." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48"
                FontFamily="Arial" Foreground="MintCream"/>
         </Grid>
         <!--CPU Icon-->
@@ -221,7 +221,7 @@
         <!--PlayerScore-->
         <Grid x:Name="PlayerScorePanel" Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Source="/PNG/Purple_Hexagon.png" Width="115" Height="115"/>
-            <Label x:Name="LblPlayerScore" Content="." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42"
+            <Label x:Name="LblPlayerScore" Content="." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48"
                FontFamily="Arial" Foreground="MintCream"/>
         </Grid>
         <!--PlayerIcon-->
