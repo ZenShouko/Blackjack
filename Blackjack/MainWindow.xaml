@@ -107,7 +107,7 @@
         </Style>
     </Window.Resources>
     
-    <Grid Height="625" Width="800" Loaded="Grid_Loaded">
+    <Grid Height="650" Width="800" Loaded="Grid_Loaded">
             <!--GRID Properties-->
         <Grid.Background>
             <ImageBrush ImageSource="/PNG/Casino_Texture.jpg" Stretch="None" TileMode="Tile" Viewport="0, 0, 100, 100" ViewportUnits="Absolute"/>
@@ -124,7 +124,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="1.1*"/>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="0.9*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
@@ -150,7 +150,7 @@
                 Grid.ColumnSpan="2" Grid.Row="1" Margin="0"/>
         <!--Cpu Deck-->
         <Border x:Name="CpuDeckPanelBorder" CornerRadius="10, 10, 20, 16" BorderBrush="BlueViolet" BorderThickness="2, 5, 2, 3" Background="Black" Opacity="0.4" 
-                Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" Margin="0, 5" Width="320" Height="175"/>
+                Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" Margin="0, 5" Width="320" Height="195"/>
         <DockPanel x:Name="CpuDeckPanel" HorizontalAlignment="Center" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Center"/>
         <!--CPU Score-->
         <Grid Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -205,16 +205,16 @@
 
             <!--Player Side-->
         <Border Visibility="Visible" x:Name="PlayerTable" Opacity="0.3" Background="Black" BorderBrush="Lavender" BorderThickness="5" 
-                CornerRadius="20" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" Margin="0, 200, 0, -200"/>
+                CornerRadius="20" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" Margin="0, 210, 0, -210"/>
         <!--PlayerDeck1-->
         <Border Visibility="Collapsed" x:Name="PlayerDeckPanelBorder" CornerRadius="10, 10, 20, 16" BorderBrush="DarkSlateGray" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.6" 
-                Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" Margin="0, 5" Width="170" Height="175" 
+                Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" Margin="0, 5" Width="170" Height="195" 
                 MouseEnter="PlayerDeckPanel_MouseEnter" MouseLeave="PlayerDeckPanel_MouseLeave"/>
         <DockPanel Visibility="Collapsed" x:Name="PlayerDeckPanel" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" 
                    HorizontalAlignment="Center" VerticalAlignment="Center" MouseEnter="PlayerDeckPanel_MouseEnter" MouseLeave="PlayerDeckPanel_MouseLeave"/>
         <!--PlayerDeck2-->
         <Border Visibility="Collapsed" x:Name="PlayerDeckPanelBorder2" CornerRadius="10, 10, 20, 16" BorderBrush="DarkSlateGray" BorderThickness="2, 3, 2, 5" Background="Black" Opacity="0.3" 
-                Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="4" Margin="5, 5, 30, 5"  Height="175" 
+                Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="4" Margin="5, 5, 30, 5"  Height="195" 
                 MouseEnter="PlayerDeckPanel_MouseEnter" MouseLeave="PlayerDeckPanel_MouseLeave"/>
         <DockPanel Visibility="Collapsed" x:Name="PlayerDeckPanel2" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center"
                    Opacity="0.4" Margin="5, 0, 30, 0" MouseEnter="PlayerDeckPanel_MouseEnter" MouseLeave="PlayerDeckPanel_MouseLeave"/>

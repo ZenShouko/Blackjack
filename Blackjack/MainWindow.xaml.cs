@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -75,47 +76,61 @@ namespace Blackjack
         public Image Card(bool Player, int Deck)
         {
             int LeftMargin = 0; //Used as the margin
-            int Height = 150;
-            int Width = 105;
 
             //Match margin so they stack on top of each other. [1st card margin 0, all others -85]
             if (Player)
             {
                 if (PlayerDeckPanel.Children.Count != 0 && Deck == 1)
                 {
-                    LeftMargin = -85;
+                    LeftMargin = -110;
                 }
                 else if (PlayerDeckPanel2.Children.Count != 0 && Deck == 2)
                 {
-                    LeftMargin = -85;
+                    LeftMargin = -110;
                 }
             }
             else
             {
                 if (CpuDeckPanel.Children.Count != 0)
                 {
-                    LeftMargin = -85;
+                    LeftMargin = -110;
                 }
             }
 
-            //Make secret card bigger so it matches other card sizes
-            if (CardName == "Card-Back")
-            {
-                Height = 155;
-                Width = 110;
-            }
-            
+            //Modify Cardname
+            string ModifName = CardName;
+            ModifName = string.Concat(ModifName.Replace("-", ""));
+
             //Create Card
             Image Card = new Image
             {
-                Height = Height,
-                Width = Width,
+                Height = 190,
+                Width = 140,
                 Stretch = Stretch.UniformToFill,
                 Source = new BitmapImage(new Uri($"/Cards/{CardName}.png", UriKind.Relative)),
-                Margin = new Thickness(LeftMargin, 0, 0, 0)
+                Margin = new Thickness(LeftMargin, 0, 0, 0),
+                Name = ModifName,
+                Cursor = Cursors.Hand
             };
 
+            Card.MouseDown += Card_MouseDown;
+
             return Card;
+        }
+
+        private void Card_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Image card = (Image)sender;
+
+            //Modify the name again
+            string name = card.Name;
+            int hyphenIndex = name.IndexOfAny("ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray(), 1);
+            name = name.Insert(hyphenIndex, "-");
+
+            //Pass the name through and open a new window
+            Properties.Settings.Default.CardName = name;
+            CardViewWindow window = new CardViewWindow();
+            window.ShowDialog();
         }
 
         public int PullCard()
@@ -245,28 +260,28 @@ namespace Blackjack
 
             if (PlayerDeckPanel.Children.Count > 0)
             {
-                PlayerSize = 110;
+                PlayerSize = 140;
             }
             if (PlayerDeckPanel2.Children.Count > 0)
             {
-                PlayerSize2 = 110;
+                PlayerSize2 = 140;
             }
             if (CpuDeckPanel.Children.Count > 0)
             {
-                CpuSize = 110;
+                CpuSize = 140;
             }
 
             foreach (var item in PlayerDeckPanel.Children)
             {
-                PlayerSize += 20;
+                PlayerSize += 25;
             }
             foreach (var item in PlayerDeckPanel2.Children)
             {
-                PlayerSize2 += 20;
+                PlayerSize2 += 25;
             }
             foreach (var item in CpuDeckPanel.Children)
             {
-                CpuSize += 20;
+                CpuSize += 25;
             }
 
             PlayerDeckPanelBorder.Width = PlayerSize;
@@ -313,9 +328,9 @@ namespace Blackjack
         private async void DisplayDeck(bool ShowPlayerDeck)
         {
             //If PlayerDeck needs to be displayed, it means betpanel is on screen, so we shift betpanel away and pull playerdeck.
-            //Betpanel on screen: Bottom-Margin = 10; Offscreen: Bottom-Margin = -200;
+            //Betpanel on screen: Bottom-Margin = 10; Offscreen: Bottom-Margin = -210;
             //PlayerDeckPanelBorder and PlayerDeckPanel Only need visibility change When getting Displayed, ELSE same rules as The Table.
-            //Only Playertable moves up. On screen margin = 0; Offscreen margin = 0, 200, 0, -200
+            //Only Playertable moves up. On screen margin = 0; Offscreen margin = 0, 210, 0, -210
             //CPU's Deck fades away. Panel = 1; Border = 0.4;
             int BetMargin;
             int DeckMargin;
@@ -332,7 +347,7 @@ namespace Blackjack
             {
                 //Move BetPanel Down
                 BetMargin = 10;
-                while(BetMargin > -380)
+                while(BetMargin > -390)
                 {
                     BetMargin -= 15;
                     BetPanel.Margin = new Thickness(0, 0, 0, BetMargin);
@@ -345,7 +360,7 @@ namespace Blackjack
                 CpuDeckPanelBorder.Opacity = 0.4;
 
                 //Move PlayerDeck Up
-                DeckMargin = 200;
+                DeckMargin = 210;
                 while(DeckMargin > 0)
                 {
                     DeckMargin -= 10;
@@ -374,7 +389,7 @@ namespace Blackjack
             {
                 //Move PlayerDeck down AND CPU DECK FADE
                 DeckMargin = 0;
-                while (DeckMargin <= 200)
+                while (DeckMargin <= 210)
                 {
                     DeckMargin += 10;
                     PlayerTable.Margin = new Thickness(0, DeckMargin, 0, (DeckMargin - (DeckMargin * 2)));
@@ -919,8 +934,7 @@ namespace Blackjack
                 if (PlayerDeck.Count == 2 && PlayerHandValue.Sum() == 21 && PlayerHandValue2.Count == 0)
                 {
                     float i = Bet * 2.5f;
-                    Math.Round(i);
-                    Money += int.Parse(i.ToString());
+                    Money += Convert.ToInt16(Math.Round(i));
                     UpdateResultText($"BLACKJACK! + €{i}", "Gold"); //Override default "Won x amount" text
                 }
                 else
