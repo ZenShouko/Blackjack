@@ -155,7 +155,6 @@ namespace Blackjack
             PlayerHandValue.Clear();
             PlayerHandValue2.Clear();
             CpuHandValue.Clear();
-            Array.Clear(Historiek, 0, Historiek.Length);
 
             //Cards on screen
             PlayerDeckPanel.Children.Clear();
@@ -463,15 +462,15 @@ namespace Blackjack
 
             //Re-enable the needed buttons
             //2de Ace waarde word als 1 opgeslagen dus split word niet herkent in de 2e if statement
-            if (PlayerDeck.ElementAt(0).Contains("Ace") && PlayerDeck.ElementAt(1).Contains("Ace") && Money >= Bet * 2) 
+            if (PlayerDeck.ElementAt(0).Contains("Ace") && PlayerDeck.ElementAt(1).Contains("Ace") && Money >= Bet)
             {
                 Button_Enabling("Hit Stand Split Double");
             }
-            else if (PlayerHandValue.ElementAt(0) == PlayerHandValue.ElementAt(1) && Money >= Bet * 2)
+            else if (PlayerHandValue.ElementAt(0) == PlayerHandValue.ElementAt(1) && Money >= Bet)
             {
                 Button_Enabling("Hit Stand Split Double");
             }
-            else if (Money >= Bet * 2)
+            else if (Money >= Bet)
             {
                 Button_Enabling("Hit Stand Double");
             }
@@ -1092,6 +1091,7 @@ namespace Blackjack
 
         private async void BtnNewGame_Click(object sender, RoutedEventArgs e)
         {
+            //Default waardes
             CardsInGame.Clear();
             TxtDeckCount.Text = (Deck.Count - CardsInGame.Count).ToString();
             Button_Enabling("");
@@ -1099,6 +1099,7 @@ namespace Blackjack
             Bet = 0;
             Ronde = 0;
             DisplayDeck(false);
+            Array.Clear(Historiek, 0, Historiek.Length);
             await Task.Delay(500);
             Reset_Table();
         }
