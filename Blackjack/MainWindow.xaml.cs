@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
@@ -11,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup.Localizer;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -67,11 +69,111 @@ namespace Blackjack
         int Bet = 0;
         int ActiveDeck = 1; //Welke Deck word nu gebruikt? (speler)
         int Ronde = 0;
+        int HitCounterSfx = 0;
+        int CpuHitCounterSfx = 0;
         //Andere Variabelen
         Random random = new Random();
         bool Soft17Clear = false;
         string CardName;
+        SoundPlayer player = null;
 
+        private void PlaySound(string AudioName)
+        {
+            switch (AudioName)
+            {
+                case "Hit":
+                    {
+                        switch (HitCounterSfx)
+                        {
+                            case 0:
+                                {
+                                    player = new SoundPlayer(Properties.Resources.Hit);
+                                    HitCounterSfx++;
+                                    break;
+                                }
+                            case 1:
+                                {
+                                    player = new SoundPlayer(Properties.Resources.Hit2);
+                                    HitCounterSfx++;
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    player = new SoundPlayer(Properties.Resources.Hit3);
+                                    HitCounterSfx++;
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    player = new SoundPlayer(Properties.Resources.Hit4);
+                                    HitCounterSfx++;
+                                    break;
+                                }
+                            case 4:
+                                {
+                                    player = new SoundPlayer(Properties.Resources.Hit5);
+                                    break;
+                                }
+                                default:
+                                {
+                                    player = new SoundPlayer(Properties.Resources.Hit5);
+                                    break;
+                                }
+                        }
+                        break;
+                    }
+                case "Cpu-Hit":
+                    {
+                        switch (CpuHitCounterSfx)
+                        {
+                            case 0:
+                                {
+                                    player = new SoundPlayer(Properties.Resources.Cpu_Hit);
+                                    CpuHitCounterSfx++;
+                                    break;
+                                }
+                            case 1:
+                                {
+                                    player = new SoundPlayer(Properties.Resources.Cpu_Hit2);
+                                    CpuHitCounterSfx++;
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    player = new SoundPlayer(Properties.Resources.Cpu_Hit3);
+                                    CpuHitCounterSfx++;
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    player = new SoundPlayer(Properties.Resources.Cpu_Hit4);
+                                    CpuHitCounterSfx++;
+                                    break;
+                                }
+                            case 4:
+                                {
+                                    player = new SoundPlayer(Properties.Resources.Cpu_Hit5);
+                                    break;
+                                }
+                            default:
+                                {
+                                    player = new SoundPlayer(Properties.Resources.Cpu_Hit5);
+                                    break;
+                                }
+                        }
+                        break;
+                    }
+                case "Deck-Share":
+                    {
+                        player = new SoundPlayer(Properties.Resources.Deck_Share);
+                        break;
+                    }
+            }
+
+            
+            //Play Sound
+            player.Play();
+        }
 
         public Image Card(bool Player, int Deck)
         {
@@ -170,6 +272,10 @@ namespace Blackjack
             TxtPlayerIcon.Text = "🤔";
             LblCpuScore.FontWeight = FontWeights.Regular;
             LblPlayerScore.FontWeight = FontWeights.Regular;
+
+            //Sfx
+            HitCounterSfx = 0;
+            CpuHitCounterSfx = 0;
 
             //Undo Split settings
             ActiveDeck = 1;
@@ -433,6 +539,9 @@ namespace Blackjack
             UpdateResultText("...", "White");
             Ronde++;
 
+            //Play Sound
+            PlaySound("Deck-Share");
+
             //Verdeel 2 kaarten
             for (int i = 0; i < 2; i++)
             {
@@ -451,6 +560,7 @@ namespace Blackjack
             //Secret Card
             CardName = "Card-Back";
             CpuDeckPanel.Children.Add(Card(false, 0));
+            PlaySound("Cpu_Hit");
             ResizeDeck();
 
             //Did we get a 21?
@@ -540,6 +650,7 @@ namespace Blackjack
 
         private void AddCard(int index, bool Player, int WhichDeck)
         {
+            
             //Set CardName to pulled card
             CardName = Deck.ElementAt(index);
             //Add card to the game (Card List) IF IT'S A NEW CARD
@@ -904,7 +1015,7 @@ namespace Blackjack
             await Task.Delay(1300);
             //Execute same steps as above but this time for second deck
             //Calculate Result
-            CalculateResult(false);
+            Result = CalculateResult(false);
 
             //Display Result
             if (Result == "Player")
@@ -1369,6 +1480,11 @@ namespace Blackjack
                 //Voeg nieuwe waarde toe aan eerste positie
                 Historiek[Historiek.Length - 1] = HistoriekLog;
             }
+
+        }
+
+        private void TxtPlayerIcon_MouseDown(object sender, MouseButtonEventArgs e)
+        {
 
         }
     }

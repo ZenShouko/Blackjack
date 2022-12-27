@@ -128,6 +128,10 @@
             <RowDefinition Height="0.9*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
+        
+        <!--Background music-->
+        <MediaElement x:Name="BackgroundMusicPlayer" Source="/Sfx/Cool-Music.mp3" LoadedBehavior="Play"
+                      IsMuted="False" Volume="0.2"/>
 
         <!--HEADER-->
         <Border Grid.ColumnSpan="6" Background="Black" Opacity="0.65" Margin="0, 0, 0, 5"/>
@@ -227,7 +231,7 @@
         <!--PlayerIcon-->
         <Canvas x:Name="PlayerIconPanel" Grid.Row="4" Grid.ColumnSpan="2" Width="120" Height="120">
             <Ellipse x:Name="PlayerEllipse" Width="120" Height="120" Fill="Lavender" Opacity="0.5"/>
-            <TextBlock x:Name="TxtPlayerIcon" Text="🤔" FontSize="82" Margin="3 ,0"/>
+            <TextBlock x:Name="TxtPlayerIcon" Text="🤔" FontSize="82" Margin="3 ,0" MouseDown="TxtPlayerIcon_MouseDown"/>
         </Canvas>
         
             <!--BetPanel-->
