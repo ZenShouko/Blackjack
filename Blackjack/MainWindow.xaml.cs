@@ -32,12 +32,7 @@ namespace Blackjack
             Reset_Table();
             ResizeDeck();
             MoneyRelatedActions();
-
-            // Voeg default values aan Historiek
-            //for (int i = 0; i < 10; i++) 
-            //{
-            //    Historiek[i] = $"'Ronde[{i + 1}] resultaten'";
-            //}
+            PlaySound();
         }
 
         //Lijsten
@@ -69,110 +64,46 @@ namespace Blackjack
         int Bet = 0;
         int ActiveDeck = 1; //Welke Deck word nu gebruikt? (speler)
         int Ronde = 0;
-        int HitCounterSfx = 0;
-        int CpuHitCounterSfx = 0;
         //Andere Variabelen
         Random random = new Random();
         bool Soft17Clear = false;
         string CardName;
+        string music = "The_Holy_Queen";
         SoundPlayer player = null;
 
-        private void PlaySound(string AudioName)
+        private void PlaySound()
         {
-            switch (AudioName)
+            switch (Properties.Settings.Default.Music)
             {
-                case "Hit":
+                case "The_Holy_Queen":
                     {
-                        switch (HitCounterSfx)
-                        {
-                            case 0:
-                                {
-                                    player = new SoundPlayer(Properties.Resources.Hit);
-                                    HitCounterSfx++;
-                                    break;
-                                }
-                            case 1:
-                                {
-                                    player = new SoundPlayer(Properties.Resources.Hit2);
-                                    HitCounterSfx++;
-                                    break;
-                                }
-                            case 2:
-                                {
-                                    player = new SoundPlayer(Properties.Resources.Hit3);
-                                    HitCounterSfx++;
-                                    break;
-                                }
-                            case 3:
-                                {
-                                    player = new SoundPlayer(Properties.Resources.Hit4);
-                                    HitCounterSfx++;
-                                    break;
-                                }
-                            case 4:
-                                {
-                                    player = new SoundPlayer(Properties.Resources.Hit5);
-                                    break;
-                                }
-                                default:
-                                {
-                                    player = new SoundPlayer(Properties.Resources.Hit5);
-                                    break;
-                                }
-                        }
+                        player = new SoundPlayer(Properties.Resources.The_Holy_Queen);
                         break;
                     }
-                case "Cpu-Hit":
+                case "Goldenvengeance":
                     {
-                        switch (CpuHitCounterSfx)
-                        {
-                            case 0:
-                                {
-                                    player = new SoundPlayer(Properties.Resources.Cpu_Hit);
-                                    CpuHitCounterSfx++;
-                                    break;
-                                }
-                            case 1:
-                                {
-                                    player = new SoundPlayer(Properties.Resources.Cpu_Hit2);
-                                    CpuHitCounterSfx++;
-                                    break;
-                                }
-                            case 2:
-                                {
-                                    player = new SoundPlayer(Properties.Resources.Cpu_Hit3);
-                                    CpuHitCounterSfx++;
-                                    break;
-                                }
-                            case 3:
-                                {
-                                    player = new SoundPlayer(Properties.Resources.Cpu_Hit4);
-                                    CpuHitCounterSfx++;
-                                    break;
-                                }
-                            case 4:
-                                {
-                                    player = new SoundPlayer(Properties.Resources.Cpu_Hit5);
-                                    break;
-                                }
-                            default:
-                                {
-                                    player = new SoundPlayer(Properties.Resources.Cpu_Hit5);
-                                    break;
-                                }
-                        }
+                        player = new SoundPlayer(Properties.Resources.Goldenvengeance);
                         break;
                     }
-                case "Deck-Share":
+                case "Wandering_Rose":
                     {
-                        player = new SoundPlayer(Properties.Resources.Deck_Share);
+                        player = new SoundPlayer(Properties.Resources.Wandering_Rose);
+                        break;
+                    }
+                case "Jazz":
+                    {
+                        player = new SoundPlayer(Properties.Resources.Jazz);
+                        break;
+                    }
+                case "Jazz2":
+                    {
+                        player = new SoundPlayer(Properties.Resources.Jazz2);
                         break;
                     }
             }
-
             
             //Play Sound
-            player.Play();
+            player.PlayLooping();
         }
 
         public Image Card(bool Player, int Deck)
@@ -272,10 +203,6 @@ namespace Blackjack
             TxtPlayerIcon.Text = "🤔";
             LblCpuScore.FontWeight = FontWeights.Regular;
             LblPlayerScore.FontWeight = FontWeights.Regular;
-
-            //Sfx
-            HitCounterSfx = 0;
-            CpuHitCounterSfx = 0;
 
             //Undo Split settings
             ActiveDeck = 1;
@@ -539,9 +466,6 @@ namespace Blackjack
             UpdateResultText("...", "White");
             Ronde++;
 
-            //Play Sound
-            PlaySound("Deck-Share");
-
             //Verdeel 2 kaarten
             for (int i = 0; i < 2; i++)
             {
@@ -560,7 +484,6 @@ namespace Blackjack
             //Secret Card
             CardName = "Card-Back";
             CpuDeckPanel.Children.Add(Card(false, 0));
-            PlaySound("Cpu_Hit");
             ResizeDeck();
 
             //Did we get a 21?
@@ -1486,6 +1409,28 @@ namespace Blackjack
         private void TxtPlayerIcon_MouseDown(object sender, MouseButtonEventArgs e)
         {
 
+        }
+
+        private void TxtPlaylist_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Playlist_Window window = new Playlist_Window();
+            window.ShowDialog();
+        }
+
+        private void Window_GotFocus(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show($"GotFocus, now playing {Properties.Settings.Default.Music}");
+            PlaySound();
+        }
+
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            //Is the muziek verandert?
+            if (music != Properties.Settings.Default.Music)
+            {
+                music = Properties.Settings.Default.Music;
+                PlaySound();
+            }
         }
     }
 }

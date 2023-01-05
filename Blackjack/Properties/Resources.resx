@@ -118,37 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Cpu_Hit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Cpu-Hit.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Goldenvengeance" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Goldenvengeance.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Cpu_Hit2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Cpu-Hit2.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Jazz" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Jazz.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Cpu_Hit3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Cpu-Hit3.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Jazz2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Jazz2.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Cpu_Hit4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Cpu-Hit4.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="The_Holy_Queen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\The_Holy_Queen.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Cpu_Hit5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Cpu-Hit5.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Deck_Share" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Deck-Share.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Hit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Hit.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Hit2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Hit2.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Hit3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Hit3.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Hit4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Hit4.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Hit5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Hit5.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Wandering_Rose" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Wandering_Rose.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

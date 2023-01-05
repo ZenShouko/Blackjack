@@ -63,99 +63,45 @@ namespace Blackjack.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Cpu_Hit {
+        internal static System.IO.UnmanagedMemoryStream Goldenvengeance {
             get {
-                return ResourceManager.GetStream("Cpu_Hit", resourceCulture);
+                return ResourceManager.GetStream("Goldenvengeance", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Cpu_Hit2 {
+        internal static System.IO.UnmanagedMemoryStream Jazz {
             get {
-                return ResourceManager.GetStream("Cpu_Hit2", resourceCulture);
+                return ResourceManager.GetStream("Jazz", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Cpu_Hit3 {
+        internal static System.IO.UnmanagedMemoryStream Jazz2 {
             get {
-                return ResourceManager.GetStream("Cpu_Hit3", resourceCulture);
+                return ResourceManager.GetStream("Jazz2", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Cpu_Hit4 {
+        internal static System.IO.UnmanagedMemoryStream The_Holy_Queen {
             get {
-                return ResourceManager.GetStream("Cpu_Hit4", resourceCulture);
+                return ResourceManager.GetStream("The_Holy_Queen", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Cpu_Hit5 {
+        internal static System.IO.UnmanagedMemoryStream Wandering_Rose {
             get {
-                return ResourceManager.GetStream("Cpu_Hit5", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Deck_Share {
-            get {
-                return ResourceManager.GetStream("Deck_Share", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Hit {
-            get {
-                return ResourceManager.GetStream("Hit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Hit2 {
-            get {
-                return ResourceManager.GetStream("Hit2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Hit3 {
-            get {
-                return ResourceManager.GetStream("Hit3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Hit4 {
-            get {
-                return ResourceManager.GetStream("Hit4", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Hit5 {
-            get {
-                return ResourceManager.GetStream("Hit5", resourceCulture);
+                return ResourceManager.GetStream("Wandering_Rose", resourceCulture);
             }
         }
     }

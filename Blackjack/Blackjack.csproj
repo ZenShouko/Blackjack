@@ -74,8 +74,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Playlist-Window.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Playlist-Window.xaml.cs">
+      <DependentUpon>Playlist-Window.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -176,37 +183,34 @@
     <Resource Include="Cards\Spades-Two.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Hit.wav" />
+    <EmbeddedResource Include="Resources\The_Holy_Queen.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Hit2.wav" />
+    <Resource Include="Album-Covers\Goldenvengeance Cover.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Hit3.wav" />
+    <EmbeddedResource Include="Resources\Wandering_Rose.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Hit4.wav" />
+    <Resource Include="Album-Covers\Wandering Rose Cover.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Hit5.wav" />
+    <EmbeddedResource Include="Resources\Goldenvengeance.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Cpu-Hit.wav" />
+    <Resource Include="Album-Covers\Jazz Cover.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Cpu-Hit2.wav" />
+    <EmbeddedResource Include="Resources\Jazz.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Cpu-Hit3.wav" />
+    <Resource Include="Album-Covers\The Holy Queen Cover.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Cpu-Hit4.wav" />
+    <Resource Include="Album-Covers\Jazz2 Cover.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Cpu-Hit5.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Deck-Share.wav" />
+    <EmbeddedResource Include="Resources\Jazz2.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

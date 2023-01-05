@@ -5,5 +5,8 @@
     <Setting Name="CardName" Type="System.String" Scope="User">
       <Value Profile="(Default)">Card-Back</Value>
     </Setting>
+    <Setting Name="Music" Type="System.String" Scope="User">
+      <Value Profile="(Default)">The_Holy_Queen</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

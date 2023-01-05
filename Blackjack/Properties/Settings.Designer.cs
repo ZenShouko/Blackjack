@@ -34,5 +34,17 @@ namespace Blackjack.Properties {
                 this["CardName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("The_Holy_Queen")]
+        public string Music {
+            get {
+                return ((string)(this["Music"]));
+            }
+            set {
+                this["Music"] = value;
+            }
+        }
     }
 }

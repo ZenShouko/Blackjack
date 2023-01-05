@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blackjack"
         mc:Ignorable="d" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight"
-        Title="BlackJack" Height="auto" Width="auto">
+        Title="BlackJack" Height="auto" Width="auto" Activated="Window_Activated">
     <Window.Resources>
         <!--Default buttons-->
         <Style TargetType="{x:Type Button}" x:Key="DefaultButton">
@@ -139,8 +139,10 @@
             <TextBlock x:Name="TxtBet" Text="BET= €10 " Foreground="White" FontSize="14" FontWeight="DemiBold"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Margin="0, 0, 0, 5">
-            <TextBlock x:Name="TxtHistoriek" Text="● Historiek ●" Foreground="LightBlue" FontSize="14" FontWeight="DemiBold" TextDecorations="Underline"
+            <TextBlock x:Name="TxtHistoriek" Text="● Historiek ●" Foreground="SlateBlue" FontSize="14" FontWeight="DemiBold" TextDecorations="Underline"
                        Cursor="Hand" MouseDown="TxtHistoriek_MouseDown"/>
+            <TextBlock x:Name="TxtPlaylist" Text="● Playlist ●" FontSize="14" FontWeight="DemiBold" TextDecorations="Underline" Foreground="MediumPurple"
+                       Margin="20 0 0 0" Cursor="Hand" MouseDown="TxtPlaylist_MouseDown"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Margin="0, 0, 0, 5">
             <TextBlock x:Name="TxtTime" Text="HH/MM/SS" Foreground="LightGray" FontSize="14" FontWeight="DemiBold"/>
