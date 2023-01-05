@@ -55,6 +55,7 @@
             <Setter Property="Foreground" Value="#ebebf2"/>
         </Style>
     </Window.Resources>
+    
     <Grid Height="400" Width="auto" MaxWidth="500">
         <Grid.Background>
             <SolidColorBrush Color="#231942"/>
@@ -63,13 +64,13 @@
         <ScrollViewer x:Name="ScrollBar" VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="20" HorizontalAlignment="Left" VerticalAlignment="Top" CanVerticallyScroll="True">
 
-                <Border x:Name="BorderHolyQueen" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Background="#5e548e" Margin="0 0 0 10">
+                <Border x:Name="BorderHolyQueen" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Background="#9f86c0" Margin="0 0 0 10">
                     <StackPanel x:Name="PnlHolyQueen" Orientation="Horizontal">
                         <Image x:Name="HolyQueenImage" Source="/Album-Covers/The Holy Queen Cover.png" Width="90" Cursor="Hand" 
-                                MouseDown="Image_MouseEnter"/>
-                        <StackPanel VerticalAlignment="Center" Margin="10 0">
-                            <TextBlock Text="The Holy Queen" VerticalAlignment="Center" FontSize="20"/>
-                            <Button x:Name="BtnHolyQueen" Content="Play" HorizontalAlignment="Left" Click="Button_Click"/>
+                            MouseDown="Image_MouseEnter"/>
+                        <StackPanel VerticalAlignment="Center" Margin="10 0" Width="200">
+                            <TextBlock Text="The Holy Queen" HorizontalAlignment="Center" FontSize="20"/>
+                            <Button x:Name="BtnHolyQueen" Content="Play" HorizontalAlignment="Center" Click="Button_Click"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -78,9 +79,9 @@
                     <StackPanel x:Name="PnlGoldenvengeance" Orientation="Horizontal">
                         <Image x:Name="GoldenvengeanceImage" Source="/Album-Covers/Goldenvengeance Cover.png" Width="90" Cursor="Hand" 
                        MouseDown="Image_MouseEnter"/>
-                        <StackPanel VerticalAlignment="Center" Margin="10 0">
-                            <TextBlock Text="GOLDENVENGEANCE" VerticalAlignment="Center" FontSize="18"/>
-                            <Button x:Name="BtnGoldenvengeance" Content="Play" HorizontalAlignment="Left" Padding="10 2" Margin="10"
+                        <StackPanel VerticalAlignment="Center" Margin="10 0" Width="200">
+                            <TextBlock Text="GOLDENVENGEANCE" HorizontalAlignment="Center" FontSize="18"/>
+                            <Button x:Name="BtnGoldenvengeance" Content="Play" HorizontalAlignment="Center" Padding="10 2" Margin="10"
                             Click="Button_Click"/>
                         </StackPanel>
                     </StackPanel>
@@ -90,9 +91,9 @@
                     <StackPanel x:Name="PnlWanderingRose" Orientation="Horizontal">
                         <Image x:Name="WanderingRoseImage" Source="/Album-Covers/Wandering Rose Cover.png" Width="90" Cursor="Hand" 
                        MouseDown="Image_MouseEnter"/>
-                        <StackPanel VerticalAlignment="Center" Margin="10 0">
-                            <TextBlock Text="Wandering Rose" VerticalAlignment="Center" FontSize="20"/>
-                            <Button x:Name="BtnWanderingRose" Content="Play" HorizontalAlignment="Left" Padding="10 2" Margin="10"
+                        <StackPanel VerticalAlignment="Center" Margin="10 0" Width="200">
+                            <TextBlock Text="Wandering Rose" HorizontalAlignment="Center" FontSize="20"/>
+                            <Button x:Name="BtnWanderingRose" Content="Play" HorizontalAlignment="Center" Padding="10 2" Margin="10"
                             Click="Button_Click"/>
                         </StackPanel>
                     </StackPanel>
@@ -102,9 +103,9 @@
                     <StackPanel x:Name="PnlJazz" Orientation="Horizontal">
                         <Image x:Name="JazzImage" Source="/Album-Covers/Jazz Cover.png" Width="90" Cursor="Hand" 
                        MouseDown="Image_MouseEnter"/>
-                        <StackPanel VerticalAlignment="Center" Margin="10 0">
-                            <TextBlock Text="Jazz" VerticalAlignment="Center" FontSize="20"/>
-                            <Button x:Name="BtnJazz" Content="Play" HorizontalAlignment="Left" Padding="10 2" Margin="10"
+                        <StackPanel VerticalAlignment="Center" Margin="10 0" Width="200">
+                            <TextBlock Text="Jazz" HorizontalAlignment="Center" FontSize="20"/>
+                            <Button x:Name="BtnJazz" Content="Play" HorizontalAlignment="Center" Padding="10 2" Margin="10"
                             Click="Button_Click"/>
                         </StackPanel>
                     </StackPanel>
@@ -114,16 +115,16 @@
                     <StackPanel x:Name="PnlJazz2" Orientation="Horizontal">
                         <Image x:Name="JazzImage2" Source="/Album-Covers/Jazz2 Cover.png" Width="90" Cursor="Hand" 
                        MouseDown="Image_MouseEnter"/>
-                        <StackPanel VerticalAlignment="Center" Margin="10 0">
-                            <TextBlock Text="Jazz 2" VerticalAlignment="Center" FontSize="20"/>
-                            <Button x:Name="BtnJazz2" Content="Play" HorizontalAlignment="Left" Padding="10 2" Margin="10"
+                        <StackPanel VerticalAlignment="Center" Margin="10 0" Width="200">
+                            <TextBlock Text="Jazz 2" HorizontalAlignment="Center" FontSize="20"/>
+                            <Button x:Name="BtnJazz2" Content="Play" HorizontalAlignment="Center" Padding="10 2" Margin="10"
                             Click="Button_Click"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
-                
+
             </StackPanel>
         </ScrollViewer>
-        
+
     </Grid>
 </Window>
