@@ -22,10 +22,12 @@ namespace Blackjack
         public CardViewWindow()
         {
             InitializeComponent();
+
             //Change Window name to card name.
             string WindowName = Properties.Settings.Default.CardName;
             WindowName = string.Concat(WindowName.Replace("-", " "));
             Title = WindowName;
+
             //Display the image
             CardImage.Source = new BitmapImage(new Uri($"/Cards/{Properties.Settings.Default.CardName}.png", UriKind.Relative));
         }

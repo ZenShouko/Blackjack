@@ -62,6 +62,11 @@ namespace Blackjack
             }
         }
 
+        /// <summary>
+        /// Enlarges or reduces album cover image size.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Image_MouseEnter(object sender, MouseEventArgs e)
         {
             //Wie is de sender?
@@ -140,6 +145,12 @@ namespace Blackjack
             
         }
 
+        /// <summary>
+        /// Saves selected music to memory.
+        /// <para>Will start playing if player returns to mainwindow.</para>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //Convert colours to BRUSH
@@ -186,6 +197,9 @@ namespace Blackjack
             }
         }
 
+        /// <summary>
+        /// Changes all panel colors to the inactive color.
+        /// </summary>
         private void ResetPanelColours()
         {
             //Convert colours to BRUSH

@@ -10,3 +10,4 @@
 	 ISSUE SOLVED :)
 
  - We can try to remove CardName and just use the last item in playerhand.
+	==> NO
